@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -71,3 +71,9 @@ deploy:
   type: git
   repo: git@github.com:CntChen/cntchen.github.io.git
   branch: master
+  
+  
+# avatar
+# avatar：https://avatars2.githubusercontent.com/u/4598445?v=3&s=460
+
+duoshuo_shortname: cntchen-notes
