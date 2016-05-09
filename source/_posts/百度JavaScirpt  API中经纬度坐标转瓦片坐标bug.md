@@ -5,7 +5,7 @@ tags: JS, 地图, Bug
 ---
 
 ## 背景
-目前我正在写一篇不同互联网地图经纬度坐标与瓦片坐标相互转换的文章，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。
+目前我正在写一篇[不同互联网地图经纬度坐标与瓦片坐标相互转换的文章][不同互联网地图经纬度坐标与瓦片坐标相互转换的文章]，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。
 在百度地图的转换上出现一个错误，怀疑是bug。
 
 ## Bug描述
@@ -117,13 +117,17 @@ if (!c)
 最中间两个数和为90，它们外边两个数和为90，最外边两个数和为89.95！不知到百度算法是怎样的，但是有点怀疑有问题。
 
 ## 参考文献
+不同互联网地图经纬度坐标与瓦片坐标相互转换的文章
+>http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/
+[不同互联网地图经纬度坐标与瓦片坐标相互转换的文章]:http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/
+
 百度地图API详解之地图坐标系统
 >http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html
 [百度地图API详解之地图坐标系统]:http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html
 
 JavaScript API Class MercatorProjection
->http://developer.baidu.com/map/reference/index.php?title=Class:%E5%9C%B0%E5%9B%BE%E7%B1%BB%E5%9E%8B%E7%B1%BB/MercatorProjection
-[JavaScript API Class MercatorProjection]:http://developer.baidu.com/map/reference/index.php?title=Class:%E5%9C%B0%E5%9B%BE%E7%B1%BB%E5%9E%8B%E7%B1%BB/MercatorProjection
+>http://developer.baidu.com/map/reference/index.php?title=Class:地图类型类/MercatorProjection
+[JavaScript API Class MercatorProjection]:http://developer.baidu.com/map/reference/index.php?title=Class:地图类型类/MercatorProjection
 
 JavaScript API V2.0
 >http://api.map.baidu.com/getscript?v=2.0&ak=E4805d16520de693a3fe707cdc962045&t=20160503160001
