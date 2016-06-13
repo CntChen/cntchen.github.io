@@ -1,6 +1,9 @@
+---
 title: console 输出 DOM 对象
+date: 2015-08-1 01:01:01
 tags: JS DOM
 ---
+
 
 ## 背景 ##
 
