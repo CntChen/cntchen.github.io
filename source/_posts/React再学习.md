@@ -322,13 +322,33 @@ class PostInfo extends React.Component {
 使用babel转译ES6 React需要三个babel预设模块：
 
 ```
-
 babel-preset-es2015 此预设包含了所有的 es2015 插件
-
 babel-preset-react 此预设包含了所有的 React 插件
-
 babel-preset-stage-0 此预设包含了 stage 0 中的所有插件
 
+```
+
+然后在`webpack`中配置loader：
+
+```
+    loaders: [{
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      loader: 'babel',
+      query: {
+        presets: ['es2015', 'stage-0', 'react'],
+      }]
+
+```
+或者在`package.json`中添加字段：
+
+```
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "stage-0"
+    ]
 ```
 
 ### 看坑
