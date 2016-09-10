@@ -56,12 +56,12 @@ JS：
 
 在 chrome中
 
-![alt text](chrome_dom_console.png)
+![alt text](./img/chrome_dom_console.png)
 
 
 
 在IE中
-![alt text](chrome_dom_console.png)
+![alt text](./img/chrome_dom_console.png)
 
 ## 方案 ##
 
