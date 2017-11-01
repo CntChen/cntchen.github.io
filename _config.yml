@@ -71,8 +71,19 @@ deploy:
   type: git
   repo: git@github.com:CntChen/cntchen.github.io.git
   branch: master
-  
-  
+
+math:
+  engine: 'mathjax' # or 'katex'
+  mathjax:
+    src: "//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    config:
+      # MathJax config
+  katex:
+    css: #custom_css_source
+    js: #custom_js_source # not used
+    config:
+      # KaTeX config
+
 # avatar
 # avatar：https://avatars2.githubusercontent.com/u/4598445?v=3&s=460
 
