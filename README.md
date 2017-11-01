@@ -15,6 +15,11 @@
 $ git clone https://github.com/CntChen/cntchen.github.io.git
 ```
 
+* download theme, what I am using is [`next`](https://github.com/iissnan/hexo-theme-next)
+```
+$ git clone https://github.com/iissnan/hexo-theme-next themes/next
+```
+
 * change branch
 ```
 $ git checkout hexo
