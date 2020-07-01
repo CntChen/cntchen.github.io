@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端 实习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前端简介简介 基于Browser大数据项目前台页面  实现后台数据交互，前台数据展示和图形化   浏览器要求 IE9+  必须开启cookie和localstorage，并且设置退出浏览器时不清理数据   功能 &amp;amp;&amp;amp; 完成情况 6个页面：搜索、源设置、任务管理、dashboard、帮助页、登陆页  Ajax交互、页面选择性更新、国际化、图形化、UI插件等  基于node.js的模拟">
+<meta name="keywords" content="前端 实习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端介绍">
+<meta property="og:url" content="http://cntchen.github.io/2015/09/12/前端介绍/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="前端简介简介 基于Browser大数据项目前台页面  实现后台数据交互，前台数据展示和图形化   浏览器要求 IE9+  必须开启cookie和localstorage，并且设置退出浏览器时不清理数据   功能 &amp;amp;&amp;amp; 完成情况 6个页面：搜索、源设置、任务管理、dashboard、帮助页、登陆页  Ajax交互、页面选择性更新、国际化、图形化、UI插件等  基于node.js的模拟">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端介绍">
+<meta name="twitter:description" content="前端简介简介 基于Browser大数据项目前台页面  实现后台数据交互，前台数据展示和图形化   浏览器要求 IE9+  必须开启cookie和localstorage，并且设置退出浏览器时不清理数据   功能 &amp;amp;&amp;amp; 完成情况 6个页面：搜索、源设置、任务管理、dashboard、帮助页、登陆页  Ajax交互、页面选择性更新、国际化、图形化、UI插件等  基于node.js的模拟">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2015/09/12/前端介绍/"/>
+
+
+
+
+
+  <title>前端介绍 | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2015/09/12/前端介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-12T01:01:01+08:00">
+                2015-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/09/12/前端介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/12/前端介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前端简介"><a href="#前端简介" class="headerlink" title="前端简介"></a>前端简介</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ul>
+<li><p>基于Browser大数据项目前台页面</p>
+</li>
+<li><p>实现后台数据交互，前台数据展示和图形化</p>
+</li>
+</ul>
+<h3 id="浏览器要求"><a href="#浏览器要求" class="headerlink" title="浏览器要求"></a>浏览器要求</h3><ul>
+<li><p>IE9+</p>
+</li>
+<li><p><strong>必须开启cookie和localstorage，并且设置退出浏览器时不清理数据</strong></p>
+</li>
+</ul>
+<h3 id="功能-amp-amp-完成情况"><a href="#功能-amp-amp-完成情况" class="headerlink" title="功能 &amp;&amp; 完成情况"></a>功能 &amp;&amp; 完成情况</h3><ul>
+<li><p>6个页面：搜索、源设置、任务管理、dashboard、帮助页、登陆页</p>
+</li>
+<li><p>Ajax交互、页面选择性更新、国际化、图形化、UI插件等</p>
+</li>
+<li><p>基于node.js的模拟后台</p>
+</li>
+</ul>
+<h2 id="Data-Compass-前端结构"><a href="#Data-Compass-前端结构" class="headerlink" title="Data Compass 前端结构"></a>Data Compass 前端结构</h2><h3 id="webroot-目录"><a href="#webroot-目录" class="headerlink" title="webroot 目录"></a>webroot 目录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;DIR&gt;          css</div><div class="line">&lt;DIR&gt;          font</div><div class="line">&lt;DIR&gt;          img</div><div class="line">&lt;DIR&gt;          js</div><div class="line">&lt;DIR&gt;          jslib</div><div class="line">&lt;DIR&gt;          page</div></pre></td></tr></table></figure>
+<h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><ul>
+<li><p>每个页面一个HTML</p>
+</li>
+<li><p>引用 CSS JS</p>
+</li>
+<li><p>header 共用</p>
+</li>
+</ul>
+<h3 id="JS基础库"><a href="#JS基础库" class="headerlink" title="JS基础库"></a>JS基础库</h3><ul>
+<li><p><a href="https://jquery.com/" target="_blank" rel="external">Jquery</a><br>重度依赖<br>页面交互：内容替换、添加事件</p>
+</li>
+<li><p><a href="http://www.chartjs.org/" target="_blank" rel="external">Chart.js</a><br>绘制图形，提供6种默认图形</p>
+</li>
+<li><p><a href="http://echarts.baidu.com/" target="_blank" rel="external">eCharts.js</a><br>绘制图形，强大的可交互处理</p>
+</li>
+<li><p><a href="http://vnjs.net/www/project/freewall/" target="_blank" rel="external">freeWall.js</a><br>应用于dashboard，可拖拽自适应布局</p>
+</li>
+<li><p><a href="http://dbushell.github.io/Pikaday/" target="_blank" rel="external">pikaday.js</a><br>时间选择器</p>
+</li>
+<li><p>json2.js<br>对象序列化为JSON string 和 反序列化为对象</p>
+</li>
+<li><p>md5.js<br>应用于login，md5生成</p>
+</li>
+</ul>
+<h3 id="JS目录"><a href="#JS目录" class="headerlink" title="JS目录"></a>JS目录</h3><ul>
+<li><p>每个页面一个JS</p>
+</li>
+<li><p><strong>util.js</strong><br>基础工具集，Cookie存储</p>
+</li>
+<li><p><strong>uihelper.js</strong><br>简单UI控件</p>
+</li>
+<li><p><strong>singleajax.js</strong><br>Ajax交互</p>
+</li>
+<li><p><strong>languageservice.js / hwsearchlanguage.js</strong><br>国际化</p>
+</li>
+<li><p><strong>hwchart.js</strong> 基于 <a href="http://www.chartjs.org/" target="_blank" rel="external">Chart.js</a><br>二次开发的绘图库</p>
+</li>
+<li><p><strong>hwecharts.js</strong> 基于 <a href="http://echarts.baidu.com/" target="_blank" rel="external">eCharts.js</a><br>二次开发的绘图库</p>
+</li>
+<li><p><strong>interface.js</strong><br>前后台交互接口，非业务功能</p>
+</li>
+<li><p>commom.js<br>各页面复用的js</p>
+</li>
+</ul>
+<h3 id="CSS目录"><a href="#CSS目录" class="headerlink" title="CSS目录"></a>CSS目录</h3><ul>
+<li><p>commom.css<br>各页面复用的css</p>
+</li>
+<li><p>每个页面一个css</p>
+</li>
+</ul>
+<h3 id="技术要点"><a href="#技术要点" class="headerlink" title="技术要点"></a>技术要点</h3><ul>
+<li><p>‘单例’的AJAX请求</p>
+</li>
+<li><p>动态的DOM构建基于<strong>隐藏的页面模板</strong><br><code>_tmpl_idcls</code> 为这类DOM的id后缀</p>
+</li>
+<li><p>基于比较的页面更新，提升性能<br><code>JSS</code></p>
+</li>
+<li><p>代码控制图形legend和content大小，避免遮盖</p>
+</li>
+</ul>
+<h2 id="前端下一步工作"><a href="#前端下一步工作" class="headerlink" title="前端下一步工作"></a>前端下一步工作</h2><ul>
+<li><p>维护当前版本，完善功能</p>
+</li>
+<li><p>基于框架和构建</p>
+</li>
+</ul>
+<h2 id="附：前端技术简介"><a href="#附：前端技术简介" class="headerlink" title="附：前端技术简介"></a>附：前端技术简介</h2><ul>
+<li><p>HTML </p>
+<p><strong>HyperText Markup Language</strong> 超文本标记语言</p>
+<ul>
+<li><p>风格类似<strong>xml</strong>的</p>
+</li>
+<li><p>富文本</p>
+</li>
+<li><p>职责：<strong>结构</strong></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;#&quot;&gt; hello world &lt;/a&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<p><strong>Cascading Style Sheets</strong> 层叠样式表</p>
+<ul>
+<li>职责：<strong>样式</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> .helloworld&#123;</div><div class="line">color： red；</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JS<br><strong>JavaScript</strong></p>
+<ul>
+<li><p>类Java语法的脚本语言</p>
+</li>
+<li><p>标准 ECMAScript</p>
+</li>
+<li><p>职责：<strong>交互逻辑</strong></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.log(&apos;hello world&apos;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>Browser<br><strong>解析和渲染页面，运行JS脚本。对HTML标准，CSS标准，JS标准支持不同</strong></p>
+<ul>
+<li><p>IE9+ 现代浏览器</p>
+</li>
+<li><p>语法走向统一 </p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端-实习/" rel="tag"># 前端 实习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/08/25/README/" rel="next" title="前端进度">
+                <i class="fa fa-chevron-left"></i> 前端进度
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/12/uihelper.js 开发记录/" rel="prev" title="uihelper.js 开发记录">
+                uihelper.js 开发记录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2015/09/12/前端介绍/"
+           data-title="前端介绍" data-url="http://cntchen.github.io/2015/09/12/前端介绍/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前端简介"><span class="nav-number">1.</span> <span class="nav-text">前端简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器要求"><span class="nav-number">1.2.</span> <span class="nav-text">浏览器要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能-amp-amp-完成情况"><span class="nav-number">1.3.</span> <span class="nav-text">功能 && 完成情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Compass-前端结构"><span class="nav-number">2.</span> <span class="nav-text">Data Compass 前端结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#webroot-目录"><span class="nav-number">2.1.</span> <span class="nav-text">webroot 目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML"><span class="nav-number">2.2.</span> <span class="nav-text">HTML</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS基础库"><span class="nav-number">2.3.</span> <span class="nav-text">JS基础库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JS目录"><span class="nav-number">2.4.</span> <span class="nav-text">JS目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS目录"><span class="nav-number">2.5.</span> <span class="nav-text">CSS目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#技术要点"><span class="nav-number">2.6.</span> <span class="nav-text">技术要点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端下一步工作"><span class="nav-number">3.</span> <span class="nav-text">前端下一步工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附：前端技术简介"><span class="nav-number">4.</span> <span class="nav-text">附：前端技术简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">5.</span> <span class="nav-text">完</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

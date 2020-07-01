@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="HTTP AJAX JSON 编码 前端," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最合适的Ajax内容编码类型背景在公司开发的一个页面的Ajax请求使用了contentType:application/json，被后台的同事要求用x-www-form-urlencoded,撕逼撕不过他，赶紧回来学学知识。 引入contentType是指http/https发送信息至服务器时的内容编码类型，contentType用于表明发送数据流的类型，服务器根据编码类型使用特定的解析方式，获取">
+<meta name="keywords" content="HTTP AJAX JSON 编码 前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最合适的Ajax内容编码类型">
+<meta property="og:url" content="http://cntchen.github.io/2016/09/09/最合适的Ajax内容编码类型/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="最合适的Ajax内容编码类型背景在公司开发的一个页面的Ajax请求使用了contentType:application/json，被后台的同事要求用x-www-form-urlencoded,撕逼撕不过他，赶紧回来学学知识。 引入contentType是指http/https发送信息至服务器时的内容编码类型，contentType用于表明发送数据流的类型，服务器根据编码类型使用特定的解析方式，获取">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最合适的Ajax内容编码类型">
+<meta name="twitter:description" content="最合适的Ajax内容编码类型背景在公司开发的一个页面的Ajax请求使用了contentType:application/json，被后台的同事要求用x-www-form-urlencoded,撕逼撕不过他，赶紧回来学学知识。 引入contentType是指http/https发送信息至服务器时的内容编码类型，contentType用于表明发送数据流的类型，服务器根据编码类型使用特定的解析方式，获取">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2016/09/09/最合适的Ajax内容编码类型/"/>
+
+
+
+
+
+  <title>最合适的Ajax内容编码类型 | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2016/09/09/最合适的Ajax内容编码类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">最合适的Ajax内容编码类型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-09T00:01:55+08:00">
+                2016-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/09/最合适的Ajax内容编码类型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/最合适的Ajax内容编码类型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="最合适的Ajax内容编码类型"><a href="#最合适的Ajax内容编码类型" class="headerlink" title="最合适的Ajax内容编码类型"></a>最合适的Ajax内容编码类型</h2><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在公司开发的一个页面的<a href="http://css88.com/doc/zeptojs_api/#$.ajax" target="_blank" rel="external">Ajax</a>请求使用了<code>contentType:application/json</code>，被后台的同事要求用<code>x-www-form-urlencoded</code>,撕逼撕不过他，赶紧回来学学知识。</p>
+<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p><code>contentType</code>是指http/https发送信息至服务器时的<strong>内容编码类型</strong>，<code>contentType</code>用于表明发送数据流的类型，服务器根据编码类型使用特定的解析方式，获取数据流中的数据。内容编码类型的作用，有点像本地文件的后缀名。</p>
+<p>####问题来了<br><em>发送Ajax请求最合适的内容编码类型是什么？</em></p>
+<h2 id="常见的contentType"><a href="#常见的contentType" class="headerlink" title="常见的contentType"></a>常见的contentType</h2><h4 id="x-www-form-urlencoded"><a href="#x-www-form-urlencoded" class="headerlink" title="x-www-form-urlencoded"></a>x-www-form-urlencoded</h4><p>这是Jquery/Zepto Ajax默认的提交类型。最简例子为：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> userInfo = &#123;</div><div class="line"> name: <span class="string">'CntChen'</span>,</div><div class="line"> info: <span class="string">'Front-End'</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">$.ajax(&#123;</div><div class="line">  url: <span class="string">'https://github.com'</span>,</div><div class="line">  type: <span class="string">'POST'</span>,</div><div class="line">  data: userInfo,</div><div class="line">  success: <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;&#125;,</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>此时默认的提交的<code>contentType</code>为<code>application/x-www-form-urlencoded</code>,此时提交的数据将会格式化成：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">name=CntChen&amp;info=Front-End</div></pre></td></tr></table></figure></p>
+<p>HTML的<code>form</code>表单默认的提交编码类型也是<code>x-www-form-urlencoded</code>,可能这就是Jquery/Zepto等类库(<strong>其实是Ajax：XMLHttpRequest</strong>)也默认使用<code>contentType:x-www-form-urlencoded</code>的原因，毕竟表单的历史比Ajax早多了。–<em>我猜的，待验证</em></p>
+<p>如果请求类型<code>type</code>是<code>GET</code>,格式化的字符串将直接拼接在url后发送到服务端；如果请求类型是<code>POST</code>，格式化的字符串将放在http body的Form Data中发送。</p>
+<h4 id="json"><a href="#json" class="headerlink" title="json"></a>json</h4><p>使用json内容编码发送数据，最简例子为：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> userInfo = &#123;</div><div class="line"> name: <span class="string">'CntChen'</span>,</div><div class="line"> Info: <span class="string">'Front-End'</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">$.ajax(&#123;</div><div class="line">  url: <span class="string">'https://github.com'</span>,</div><div class="line">  contentType: <span class="string">'application/json'</span>,</div><div class="line">  type: <span class="string">'POST'</span>,</div><div class="line">  data: <span class="built_in">JSON</span>.stringify(userInfo),</div><div class="line">  success: <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;&#125;,</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>最主要的不同有3点：</p>
+<ul>
+<li>需要<strong>显式指定</strong><code>contentType</code><strong>为</strong><code>application/json</code>，覆盖默认的contentType</li>
+<li><p>需要<strong>使用</strong><code>JSON.stringify</code><strong>序列化</strong>需要提交的数据对象，序列化的结果为：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"name"</span>:<span class="string">"CntChen"</span>,<span class="string">"info"</span>:<span class="string">"Front-End"</span>&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>提交的类型不能为<code>GET</code>,使用<code>GET</code>的话，数据会在url中发送，此时就无法以json字符串的编码发送</p>
+</li>
+</ul>
+<h3 id="multipart-form-data"><a href="#multipart-form-data" class="headerlink" title="multipart/form-data"></a>multipart/form-data</h3><blockquote>
+<p>When you are writing client-side code, all you need to know is use multipart/form-data when your form includes any &lt; input type=”file” &gt; elements.<br>– <a href="http://stackoverflow.com/questions/4526273/what-does-enctype-multipart-form-data-mean" target="_blank" rel="external">multipart/form-data</a></p>
+</blockquote>
+<p><code>multipart/form-data</code>主要用于传输文件数据的。</p>
+<h2 id="JS对象编码"><a href="#JS对象编码" class="headerlink" title="JS对象编码"></a>JS对象编码</h2><p>对于扁平的参数对象，使用<code>x-www-form-urlencoded</code>或<code>json</code>并没有大的差别，后台都可以处理成对象，并且数据编码后的长度差别不大。<br>但是对于<strong>对象中嵌套对象</strong>，或<strong>对象字段包含数组</strong>，此时两种内容编码方式就有较大差别。</p>
+<p><a href="http://jsbin.com/bepeboteji/edit?js,output" target="_blank" rel="external">格式化demo</a></p>
+<h4 id="对象嵌套"><a href="#对象嵌套" class="headerlink" title="对象嵌套"></a>对象嵌套</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    userInfo :&#123;</div><div class="line">     name: <span class="string">'CntChen'</span>,</div><div class="line">     info: <span class="string">'Front-End'</span>,</div><div class="line">     login: <span class="literal">true</span>,</div><div class="line">    &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>to x-www-form-urlencoded <code>(1)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">userInfo[name]=CntChen&amp;userInfo[info]=Front-End&amp;userInfo[login]=<span class="literal">true</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>to json <code>(2)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"userInfo"</span>:&#123;<span class="string">"name"</span>:<span class="string">"CntChen"</span>,<span class="string">"Info"</span>:<span class="string">"Front-End"</span>,<span class="string">"login"</span>:<span class="literal">true</span>&#125;&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="对象字段为数组"><a href="#对象字段为数组" class="headerlink" title="对象字段为数组"></a>对象字段为数组</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    authors:[</div><div class="line">      &#123;</div><div class="line">        name: <span class="string">'CntChen'</span>,</div><div class="line">        info: <span class="string">'Front-End'</span>,</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        name: <span class="string">'Eva'</span>,</div><div class="line">        info: <span class="string">'Banker'</span>,</div><div class="line">      &#125;</div><div class="line">    ],</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>to x-www-form-urlencoded <code>(3)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">authors[<span class="number">0</span>][name]=CntChen&amp;authors[<span class="number">0</span>][info]=Front-End&amp;authors[<span class="number">1</span>][name]=Eva&amp;authors[<span class="number">1</span>][info]=Banker</div></pre></td></tr></table></figure>
+</li>
+<li><p>to json <code>(4)</code></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"authors"</span>:[&#123;<span class="string">"name"</span>:<span class="string">"CntChen"</span>,<span class="string">"info"</span>:<span class="string">"Front-End"</span>&#125;,&#123;<span class="string">"name"</span>:<span class="string">"Eva"</span>,<span class="string">"info"</span>:<span class="string">"Banker"</span>&#125;]&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>可见：<code>x-www-form-urlencoded</code>是先将对象<strong>铺平</strong>，然后使用<code>key=value</code>的方式，用<code>&amp;</code>作为间隔。对于嵌套对象的每个字段，都要传输其前缀，如<code>(1)</code>中的<code>userInfo</code>重复传输了3次;<code>(3)</code>中authors传输了4次。<br>如果对象是多重嵌套的，或者嵌套对象的字段较多，<code>x-www-form-urlencoded</code>会产生更多冗余信息。同时，<code>x-www-form-urlencoded</code>可读性不如<code>json</code>字符串。</p>
+<h2 id="回答问题：json最好"><a href="#回答问题：json最好" class="headerlink" title="回答问题：json最好"></a>回答问题：json最好</h2><h4 id="较小的传输量"><a href="#较小的传输量" class="headerlink" title="较小的传输量"></a>较小的传输量</h4><p>从前文可以看出，使用json字符串的形式，可以减少冗余字段的传输，减少请求的数据量。</p>
+<blockquote>
+<p>补充：可能你会觉得<code>(4)</code>中数组内的<code>name</code>和<code>info</code>也传输了多次，是不是也存在冗余？其实这不是冗余。因为对数组中的各对象，并不要求其具有相同的字段（数组中的对象并不是结构化的），所以不能忽略“相同”的字段名。使用<code>x-www-form-urlencoded</code>编码方式，数组内对象的字段也是重复传输。</p>
+</blockquote>
+<h4 id="请求与返回统一"><a href="#请求与返回统一" class="headerlink" title="请求与返回统一"></a>请求与返回统一</h4><p>目前许多前后端交互的返回数据是json字符串，这可能是考虑<strong>较小的传输量</strong>而作出的选择。同时，ES3.1添加了<a href="http://wiki.ecmascript.org/doku.php?id=es3.1:json_support" target="_blank" rel="external">JSON对象</a>，许多浏览器可以<a href="http://caniuse.com/#search=JSON" target="_blank" rel="external">直接使用JSON对象</a>，可以将json字符串解析为JS对象(<code>JSON.parse</code>),将JS对象编码为json字符串（<code>JSON.stringify</code>）;<br>所以使用json编码请求数据，其编码解码非常方便，并且可以保持与后台返回数据的格式一致。<br><strong>一致是一件很美好的事情。</strong></p>
+<h4 id="框架的支持"><a href="#框架的支持" class="headerlink" title="框架的支持"></a>框架的支持</h4><p>目前Mvvm的前端框架如React，网络请求通常是提交一个JS对象(传输的时候编码为json字符串)。后台服务器如Koa，接收请求和响应的数据是json字符串。</p>
+<h4 id="可读性高"><a href="#可读性高" class="headerlink" title="可读性高"></a>可读性高</h4><p>可读性高是json格式<a href="http://www.json.org/" target="_blank" rel="external">自带buff</a>。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>赶紧使用<code>contentType=applications/json</code>。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li>Ajax<blockquote>
+<p><a href="http://css88.com/doc/zeptojs_api/#$.ajax" target="_blank" rel="external">http://css88.com/doc/zeptojs_api/#$.ajax</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>x-www-form-urlencoded VS json - Pros and Cons. And Vulns.<blockquote>
+<p><a href="http://homakov.blogspot.in/2012/06/x-www-form-urlencoded-vs-json-pros-and.html" target="_blank" rel="external">http://homakov.blogspot.in/2012/06/x-www-form-urlencoded-vs-json-pros-and.html</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>What does enctype=’multipart/form-data’ mean?<blockquote>
+<p><a href="http://stackoverflow.com/questions/4526273/what-does-enctype-multipart-form-data-mean" target="_blank" rel="external">http://stackoverflow.com/questions/4526273/what-does-enctype-multipart-form-data-mean</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>Can I use JSON<blockquote>
+<p><a href="http://caniuse.com/#search=JSON" target="_blank" rel="external">http://caniuse.com/#search=JSON</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>JSON<blockquote>
+<p><a href="http://www.json.org/" target="_blank" rel="external">http://www.json.org/</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/HTTP-AJAX-JSON-编码-前端/" rel="tag"># HTTP AJAX JSON 编码 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/14/React再学习/" rel="next" title="React再学习">
+                <i class="fa fa-chevron-left"></i> React再学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/15/前后端分离开发模式的-mock-平台预研/" rel="prev" title="前后端分离开发模式的 mock 平台预研">
+                前后端分离开发模式的 mock 平台预研 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2016/09/09/最合适的Ajax内容编码类型/"
+           data-title="最合适的Ajax内容编码类型" data-url="http://cntchen.github.io/2016/09/09/最合适的Ajax内容编码类型/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#最合适的Ajax内容编码类型"><span class="nav-number">1.</span> <span class="nav-text">最合适的Ajax内容编码类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引入"><span class="nav-number">3.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的contentType"><span class="nav-number">4.</span> <span class="nav-text">常见的contentType</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#x-www-form-urlencoded"><span class="nav-number">4.0.1.</span> <span class="nav-text">x-www-form-urlencoded</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json"><span class="nav-number">4.0.2.</span> <span class="nav-text">json</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multipart-form-data"><span class="nav-number">4.1.</span> <span class="nav-text">multipart/form-data</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JS对象编码"><span class="nav-number">5.</span> <span class="nav-text">JS对象编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象嵌套"><span class="nav-number">5.0.1.</span> <span class="nav-text">对象嵌套</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对象字段为数组"><span class="nav-number">5.0.2.</span> <span class="nav-text">对象字段为数组</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回答问题：json最好"><span class="nav-number">6.</span> <span class="nav-text">回答问题：json最好</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#较小的传输量"><span class="nav-number">6.0.1.</span> <span class="nav-text">较小的传输量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#请求与返回统一"><span class="nav-number">6.0.2.</span> <span class="nav-text">请求与返回统一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#框架的支持"><span class="nav-number">6.0.3.</span> <span class="nav-text">框架的支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可读性高"><span class="nav-number">6.0.4.</span> <span class="nav-text">可读性高</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">9.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

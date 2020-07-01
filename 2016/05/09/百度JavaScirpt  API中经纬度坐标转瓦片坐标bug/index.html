@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JS, 地图, Bug," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="背景目前我正在写一篇不同互联网地图经纬度坐标与瓦片坐标相互转换的文章，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。在百度地图的转换上出现一个错误，怀疑是bug。 Bug描述百度平面坐标百度地图采用了自己的坐标系统和瓦片编号方法，主要参考文章百度地图API详解之地图坐">
+<meta name="keywords" content="JS, 地图, Bug">
+<meta property="og:type" content="article">
+<meta property="og:title" content="百度JavaScript API中经纬度坐标转瓦片坐标bug">
+<meta property="og:url" content="http://cntchen.github.io/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="背景目前我正在写一篇不同互联网地图经纬度坐标与瓦片坐标相互转换的文章，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。在百度地图的转换上出现一个错误，怀疑是bug。 Bug描述百度平面坐标百度地图采用了自己的坐标系统和瓦片编号方法，主要参考文章百度地图API详解之地图坐">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cntchen.github.io/img/百度JavaScirpt%20API中经纬度坐标转瓦片坐标bug/百度API%20bug代码.png">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="百度JavaScript API中经纬度坐标转瓦片坐标bug">
+<meta name="twitter:description" content="背景目前我正在写一篇不同互联网地图经纬度坐标与瓦片坐标相互转换的文章，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。在百度地图的转换上出现一个错误，怀疑是bug。 Bug描述百度平面坐标百度地图采用了自己的坐标系统和瓦片编号方法，主要参考文章百度地图API详解之地图坐">
+<meta name="twitter:image" content="http://cntchen.github.io/img/百度JavaScirpt%20API中经纬度坐标转瓦片坐标bug/百度API%20bug代码.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/"/>
+
+
+
+
+
+  <title>百度JavaScript API中经纬度坐标转瓦片坐标bug | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">百度JavaScript API中经纬度坐标转瓦片坐标bug</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-09T00:02:39+08:00">
+                2016-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>目前我正在写一篇<a href="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/">不同互联网地图经纬度坐标与瓦片坐标相互转换的文章</a>，涉及百度地图、高德地图、谷歌地图，并提供了转换的类库。某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。<br>在百度地图的转换上出现一个错误，怀疑是bug。</p>
+<h2 id="Bug描述"><a href="#Bug描述" class="headerlink" title="Bug描述"></a>Bug描述</h2><h3 id="百度平面坐标"><a href="#百度平面坐标" class="headerlink" title="百度平面坐标"></a>百度平面坐标</h3><p>百度地图采用了自己的坐标系统和瓦片编号方法，主要参考文章<a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="external">百度地图API详解之地图坐标系统</a>。<br>百度地图定义了另一种坐标系，称为<strong>百度平面坐标系</strong>，百度的平面坐标可以与百度经纬度坐标直接转换，与当前的瓦片等级无关。<br>具体转换在百度地图JavaScript API中实现–<a href="http://developer.baidu.com/map/reference/index.php?title=Class:地图类型类/MercatorProjection" target="_blank" rel="external">JavaScript API Class MercatorProjection</a>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 根据球面坐标获得平面坐标</div><div class="line">lngLatToPoint(lngLat:Point) </div><div class="line">// 根据平面坐标获得球面坐标</div><div class="line">pointToLngLat(point:Pixel)</div></pre></td></tr></table></figure></p>
+<h3 id="纬度为负数（南纬）时候的转换错误"><a href="#纬度为负数（南纬）时候的转换错误" class="headerlink" title="纬度为负数（南纬）时候的转换错误"></a>纬度为负数（南纬）时候的转换错误</h3><p>使用<a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="external">百度地图API详解之地图坐标系统</a>中提供的测试样例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lnglat = &#123;lng: 116.404, lat: 39.915&#125;</div></pre></td></tr></table></figure></p>
+<p>得到结果是正确的平面坐标：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; pointX: 12958175, pointY: 4825923.77 &#125;</div></pre></td></tr></table></figure></p>
+<p>然后保持经度不变，纬度取负值：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lnglat = &#123;  lng: 116.404,   lat: -39.915&#125;</div></pre></td></tr></table></figure></p>
+<p>得到的平面坐标为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; pointX: 12958175, pointY: -4823785.38 &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>怀疑是bug的情况：pointY 的绝对值并不相等。</strong>但是也有可能是百度地图的平面坐标原点纬度方向并不在赤道上，所以两个值的绝对值不等。</p>
+<p>对<code>{ pointX: 12958175, pointY: -4823785.38 }</code>再转换为经纬度坐标，结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; lng: 116.404, lat: -39.900206 &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>疑是bug的情况：转回经纬度后lat的值不等于初始值，而且误差是公里级别的。</strong>而<code>{ pointX: 12958175, pointY: 4825923.77 }</code>转换回经纬度的结果是正确的。多次测试发现lng无论正负与pointX的转换都是正确的；lat为正数时，转换为pointY，再由pointY转换为lat的结果是相同的；lat为负数时，相互转换结果不匹配。<strong>所以<code>pointToLngLat(point:Pixel)</code>方法应该没有问题，<code>lngLatToPoint(lngLat:Point)</code>方法有错误，并且是在lat为负数的情况时出错</strong>。</p>
+<h2 id="Bug分析"><a href="#Bug分析" class="headerlink" title="Bug分析"></a>Bug分析</h2><p>首先查看百度地图的<a href="http://api.map.baidu.com/getscript?v=2.0&amp;ak=E4805d16520de693a3fe707cdc962045&amp;t=20160503160001" target="_blank" rel="external">JavaScript API V2.0</a>:</p>
+<blockquote>
+<p><a href="http://api.map.baidu.com/getscript?v=2.0&amp;ak=E4805d16520de693a3fe707cdc962045&amp;t=20160503160001" target="_blank" rel="external">http://api.map.baidu.com/getscript?v=2.0&amp;ak=E4805d16520de693a3fe707cdc962045&amp;t=20160503160001</a></p>
+</blockquote>
+<p>相关代码为：<br><img src="/img/百度JavaScirpt API中经纬度坐标转瓦片坐标bug/百度API bug代码.png" alt="百度API bug代码" title="百度API bug代码"></p>
+<p>格式化一下，<a href="https://github.com/CntChen/tile-lnglat-transform/blob/master/src/node-baidusdk.js" target="_blank" rel="external">完整代码点这里</a>，主要代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">Au: [75, 60, 45, 30, 15, 0],</div><div class="line">iG: [</div><div class="line">  [-0.0015702102444, 111320.7020616939, 1704480524535203, -10338987376042340, 26112667856603880, -35149669176653700, 26595700718403920, -10725012454188240, 1800819912950474, 82.5],</div><div class="line">  [8.277824516172526E-4, 111320.7020463578, 6.477955746671607E8, -4.082003173641316E9, 1.077490566351142E10, -1.517187553151559E10, 1.205306533862167E10, -5.124939663577472E9, 9.133119359512032E8, 67.5],</div><div class="line">  [0.00337398766765, 111320.7020202162, 4481351.045890365, -2.339375119931662E7, 7.968221547186455E7, -1.159649932797253E8, 9.723671115602145E7, -4.366194633752821E7, 8477230.501135234, 52.5],</div><div class="line">  [0.00220636496208, 111320.7020209128, 51751.86112841131, 3796837.749470245, 992013.7397791013, -1221952.21711287, 1340652.697009075, -620943.6990984312, 144416.9293806241, 37.5],</div><div class="line">  [-3.441963504368392E-4, 111320.7020576856, 278.2353980772752, 2485758.690035394, 6070.750963243378, 54821.18345352118, 9540.606633304236, -2710.55326746645, 1405.483844121726, 22.5],</div><div class="line">  [-3.218135878613132E-4, 111320.7020701615, 0.00369383431289, 823725.6402795718, 0.46104986909093, 2351.343141331292, 1.58060784298199, 8.77738589078284, 0.37238884252424, 7.45]</div><div class="line">],</div><div class="line"></div><div class="line">&#123;</div><div class="line">// ...</div><div class="line">for (var d = 0; d &lt; this.Au.length; d++)</div><div class="line">  if (b.lat &gt;= this.Au[d]) &#123;</div><div class="line">    c = this.iG[d];</div><div class="line">    break</div><div class="line">  &#125;</div><div class="line">if (!c)</div><div class="line">  for (d = this.Au.length - 1; 0 &lt;= d; d--)</div><div class="line">    if (b.lat &lt;= -this.Au[d]) &#123;</div><div class="line">      c = this.iG[d];</div><div class="line">      break</div><div class="line">    &#125;</div><div class="line">// ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以上代码用于求pointY数值，方法是根据lat的数值，分段使用不同的参数：</p>
+<ul>
+<li>当lat大于等于0时，从数组 [75, 60, 45, 30, 15, 0]顺序判断lat的范围，然后使用对应的参数。</li>
+<li>当lat小于0时，从数组[75, 60, 45, 30, 15, 0]对数值取反并逆序判断lat的范围，然后使用对应的参数。</li>
+</ul>
+<p>问题在于：当lat小于0时的第一个判断等价于<code>b.lat &lt;= -this.Au[this.Au.length - 1]</code> –&gt; <code>b.lat&lt;=0</code>，该判断恒成立。一直使用<code>this.Au[this.Au.length - 1]</code>做为pointY计算参数。</p>
+<p>修改代码为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if (!c)</div><div class="line">  for (d = 0; d &lt; this.Au.length; d++)</div><div class="line">    if (b.lat &lt;= -this.Au[d]) &#123;</div><div class="line">      c = this.iG[d];</div><div class="line">      break</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>转换后结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; pointX: 12958175, pointY: -4825923.77 &#125;</div></pre></td></tr></table></figure></p>
+<p>再转换为经纬度：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; lng: 116.404, lat: -39.915 &#125;</div></pre></td></tr></table></figure></p>
+<p>问题解决。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>应该是百度地图代码写错了。不是故意混淆或加密的问题。稍微做修改就可以了。</p>
+<h3 id="BTY"><a href="#BTY" class="headerlink" title="BTY"></a>BTY</h3><p>计算参数<code>this.Au</code>二维数组中每行的最后一个数可以组成一个新数组：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[82.5, 67.5, 52.5, 37.5, 22.5, 7.45]</div></pre></td></tr></table></figure></p>
+<p>最中间两个数和为90，它们外边两个数和为90，最外边两个数和为89.95！不知到百度算法是怎样的，但是有点怀疑有问题。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>不同互联网地图经纬度坐标与瓦片坐标相互转换的文章</p>
+<blockquote>
+<p><a href="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/">http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/</a></p>
+</blockquote>
+<p>百度地图API详解之地图坐标系统</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="external">http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html</a></p>
+</blockquote>
+<p>JavaScript API Class MercatorProjection</p>
+<blockquote>
+<p><a href="http://developer.baidu.com/map/reference/index.php?title=Class:地图类型类/MercatorProjection" target="_blank" rel="external">http://developer.baidu.com/map/reference/index.php?title=Class:地图类型类/MercatorProjection</a></p>
+</blockquote>
+<p>JavaScript API V2.0</p>
+<blockquote>
+<p><a href="http://api.map.baidu.com/getscript?v=2.0&amp;ak=E4805d16520de693a3fe707cdc962045&amp;t=20160503160001" target="_blank" rel="external">http://api.map.baidu.com/getscript?v=2.0&amp;ak=E4805d16520de693a3fe707cdc962045&amp;t=20160503160001</a></p>
+</blockquote>
+<p>node-baidusdk.js</p>
+<blockquote>
+<p><a href="https://github.com/CntChen/tile-lnglat-transform/blob/master/src/node-baidusdk.js" target="_blank" rel="external">https://github.com/CntChen/tile-lnglat-transform/blob/master/src/node-baidusdk.js</a></p>
+</blockquote>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JS-地图-Bug/" rel="tag"># JS, 地图, Bug</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/12/Dashborad-页面开发记录/" rel="next" title="Dashborad 页面开发记录">
+                <i class="fa fa-chevron-left"></i> Dashborad 页面开发记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/" rel="prev" title="国内主要地图瓦片坐标系定义及计算原理">
+                国内主要地图瓦片坐标系定义及计算原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/"
+           data-title="百度JavaScript API中经纬度坐标转瓦片坐标bug" data-url="http://cntchen.github.io/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bug描述"><span class="nav-number">2.</span> <span class="nav-text">Bug描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#百度平面坐标"><span class="nav-number">2.1.</span> <span class="nav-text">百度平面坐标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#纬度为负数（南纬）时候的转换错误"><span class="nav-number">2.2.</span> <span class="nav-text">纬度为负数（南纬）时候的转换错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bug分析"><span class="nav-number">3.</span> <span class="nav-text">Bug分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">4.</span> <span class="nav-text">结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BTY"><span class="nav-number">4.1.</span> <span class="nav-text">BTY</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">6.</span> <span class="nav-text">完</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="瓦片 地图 JS 坐标," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文将介绍瓦片坐标相关知识，并提供高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换方法和类库。  背景互联网地图服务商的在线地图都通过瓦片的方式提供，称为瓦片地图服务。最常见的地图瓦片是图片格式的，现在有的地图服务商也提供了矢量的瓦片数据，然后在用户端使用Canvas渲染成图片，如node-canvas实现百度地图个性化底图绘制。在进行地图开发时，为获取特定经纬度所在区域的瓦片和获取">
+<meta name="keywords" content="瓦片 地图 JS 坐标">
+<meta property="og:type" content="article">
+<meta property="og:title" content="国内主要地图瓦片坐标系定义及计算原理">
+<meta property="og:url" content="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="本文将介绍瓦片坐标相关知识，并提供高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换方法和类库。  背景互联网地图服务商的在线地图都通过瓦片的方式提供，称为瓦片地图服务。最常见的地图瓦片是图片格式的，现在有的地图服务商也提供了矢量的瓦片数据，然后在用户端使用Canvas渲染成图片，如node-canvas实现百度地图个性化底图绘制。在进行地图开发时，为获取特定经纬度所在区域的瓦片和获取">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/墨卡托投影示意图.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/瓦片切割（瓦片金字塔）.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/高德地图Level=2的瓦片坐标编号情况.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/高德地图坐标转换图解.png">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/百度地图Level=2的瓦片坐标编号情况.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/百度地图坐标转换图解.png">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="国内主要地图瓦片坐标系定义及计算原理">
+<meta name="twitter:description" content="本文将介绍瓦片坐标相关知识，并提供高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换方法和类库。  背景互联网地图服务商的在线地图都通过瓦片的方式提供，称为瓦片地图服务。最常见的地图瓦片是图片格式的，现在有的地图服务商也提供了矢量的瓦片数据，然后在用户端使用Canvas渲染成图片，如node-canvas实现百度地图个性化底图绘制。在进行地图开发时，为获取特定经纬度所在区域的瓦片和获取">
+<meta name="twitter:image" content="http://cntchen.github.io/img/国内主要地图瓦片坐标系定义及计算原理/墨卡托投影示意图.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/"/>
+
+
+
+
+
+  <title>国内主要地图瓦片坐标系定义及计算原理 | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">国内主要地图瓦片坐标系定义及计算原理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-09T16:15:46+08:00">
+                2016-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/09/国内主要地图瓦片坐标系定义及计算原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文将介绍瓦片坐标相关知识，并提供高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换方法和类库。</p>
+</blockquote>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>互联网地图服务商的在线地图都通过瓦片的方式提供，称为<a href="https://en.wikipedia.org/wiki/Tile_Map_Service" target="_blank" rel="external">瓦片地图服务</a>。最常见的地图瓦片是图片格式的，现在有的地图服务商也提供了矢量的瓦片数据，然后在用户端使用Canvas渲染成图片，如<a href="http://www.cnblogs.com/well1010/articles/baidu-map-node-canvas.html" target="_blank" rel="external">node-canvas实现百度地图个性化底图绘制</a>。<br>在进行地图开发时，为获取特定经纬度所在区域的瓦片和获取瓦片上像素点对应的经纬度，经常需要进行经纬度坐标与瓦片坐标、像素坐标的相互转换。本文将介绍瓦片坐标相关知识，并提供高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换方法和转换类库–<a href="https://github.com/CntChen/tile-lnglat-transform" target="_blank" rel="external">tile-lnglat-transform</a>。</p>
+<h2 id="主要经纬度坐标系"><a href="#主要经纬度坐标系" class="headerlink" title="主要经纬度坐标系"></a>主要经纬度坐标系</h2><p>国际标准的经纬度坐标是<code>WGS84</code>，Open Street Map、外国版的Google Map都是采用<code>WGS84</code>；高德地图使用的坐标系是<code>GCJ-02</code>；百度地图使用的坐标系是<code>BD-09</code>。高德地图和百度地图都提供了<strong>在线的单向坐标转换</strong>接口，将其他坐标系换化到自己的坐标系，但这种转换受限于http url请求字段长度和网络请求延迟，批量处理并不实用。<strong>离线相互转换</strong>可以通过开源JavaScript库<a href="https://github.com/wandergis/coordtransform" target="_blank" rel="external">coordtransform</a>实现，误差在10米左右。<br>虽然各地图服务商经纬度坐标系不同，但某一互联网地图的经纬度坐标与瓦片坐标相互转换只与该地图商的墨卡托投影和瓦片编号的定义有关，跟地图商采用的大地坐标系标准无关。</p>
+<h2 id="墨卡托投影"><a href="#墨卡托投影" class="headerlink" title="墨卡托投影"></a>墨卡托投影</h2><p>使用经纬度表示位置的大地坐标系虽然可以描述地球上点的位置，但是对于地图地理数据在<strong>二维平面内展示</strong>的场景，需要通过投影的方式将三维空间中的点映射到二维空间中。地图投影需要建立地球表面点与投影平面点的一一对应关系，在互联网地图中常使用墨卡托投影。墨卡托投影是荷兰地理学家墨卡托于1569年提出的一种地球投影方法，该方法是圆柱投影的一种。投影的更多内容，可以查看<a href="http://blog.sina.com.cn/s/blog_517eed9f0102w4rm.html" target="_blank" rel="external">地图投影的N种姿势</a>。</p>
+<p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/墨卡托投影示意图.jpg" alt="墨卡托投影示意图" title="墨卡托投影示意图"></p>
+<p>据我了解，<strong>各大地图服务商都采用了<a href="https://en.wikipedia.org/wiki/Web_Mercator" target="_blank" rel="external">Web Mercator</a>进行投影</strong>，瓦片坐标系的不同主要是投影截取的地球范围不同、瓦片坐标起点不同。</p>
+<h4 id="值得注意的是"><a href="#值得注意的是" class="headerlink" title="值得注意的是:"></a>值得注意的是:</h4><ul>
+<li><strong>墨卡托投影并不是一种坐标系</strong>，而是为了在二维平面上展示三维地球而进行的一种空间映射。所以在GIS地图和互联网地图中，虽然用户看到的地图经过了墨卡托投影，但依然使用经纬度坐标来表示地球上点的位置。</li>
+<li>在地图绘制和地图可视化时，就需要将地图数据使用投影的方式来呈现。</li>
+</ul>
+<h2 id="瓦片切割和瓦片坐标"><a href="#瓦片切割和瓦片坐标" class="headerlink" title="瓦片切割和瓦片坐标"></a>瓦片切割和瓦片坐标</h2><p>对于经过墨卡托投影为平面的世界地图，在不同的地图分辨率(整个世界地图的像素大小)下，通过切割的方式将世界地图划分为像素为$256\times256$的地图单元，划分成的每一块地图单元称为地图瓦片。<br>地图瓦片具有以下特点：</p>
+<ul>
+<li><strong>具有唯一的瓦片等级（Level）和瓦片坐标编号（tileX, tileY）。</strong></li>
+<li>瓦片分辨率为256$\times$256。</li>
+<li>最小的地图等级是0，此时世界地图只由一张瓦片组成。</li>
+<li>瓦片等级越高，组成世界地图的瓦片数越多，可以展示的地图越详细。</li>
+<li>某一瓦片等级地图的瓦片是由低一级的各瓦片切割成的4个瓦片组成，形成了瓦片金字塔。</li>
+</ul>
+<p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/瓦片切割（瓦片金字塔）.jpg" alt="瓦片切割（瓦片金字塔）" title="瓦片切割（瓦片金字塔）"></p>
+<h2 id="高德地图瓦片坐标"><a href="#高德地图瓦片坐标" class="headerlink" title="高德地图瓦片坐标"></a>高德地图瓦片坐标</h2><h3 id="坐标系定义"><a href="#坐标系定义" class="headerlink" title="坐标系定义"></a>坐标系定义</h3><p><strong>高德地图瓦片坐标与Google Map、Open Street Map相同。</strong>高德地图的墨卡托投影截取了纬度（约85.05ºS, 约85.05ºN）之间部分的地球，使得投影后的平面地图水平方向和垂直方向长度相等。将墨卡托投影地图的左上角作为瓦片坐标系起点，往左方向为X轴，X轴与北纬85.05º重合且方向向左；往下方向为Y轴，Y轴与东经180º（亦为西经180º）重合且方向向下。瓦片坐标最小等级为0级，此时平面地图是一个像素为256*256的瓦片。在某一瓦片层级Level下，瓦片坐标的X轴和Y轴各有$2^{Level}$个瓦片编号，瓦片地图上的瓦片总数为$2^{Level}\times2^{Level}$。</p>
+<p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/高德地图Level=2的瓦片坐标编号情况.jpg" alt="高德地图Level=2的瓦片坐标编号情况" title="高德地图Level=2的瓦片坐标编号情况"></p>
+<p>如上图所示，此时X方向和Y方向各有4个瓦片编号，总瓦片数为16。中国大概位于高德瓦片坐标的（3，1）中。</p>
+<h3 id="坐标转换图解"><a href="#坐标转换图解" class="headerlink" title="坐标转换图解"></a>坐标转换图解</h3><p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/高德地图坐标转换图解.png" alt="高德地图坐标转换图解" title="高德地图坐标转换图解"></p>
+<p>从高德地图坐标转换图解中可以看出，高德地图的坐标转换具有以下特点：</p>
+<ul>
+<li>所有坐标转换都在某一瓦片等级下进行，不同瓦片等级下的转换结果不同。</li>
+<li>经纬度坐标可以直接转换为瓦片坐标和瓦片像素坐标。</li>
+<li>瓦片像素坐标需要结合其瓦片坐标才能得到该像素坐标的经纬度坐标。</li>
+</ul>
+<h3 id="坐标转换公式"><a href="#坐标转换公式" class="headerlink" title="坐标转换公式"></a>坐标转换公式</h3><p>方法参考：<a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames" target="_blank" rel="external">Slippy map tilenames</a></p>
+<ul>
+<li>经纬度坐标（lng, lat）转瓦片坐标（tileX， tileY）:</li>
+</ul>
+<p>$$tileX=\lfloor\frac{lng + 180}{360}\times{2^{Level}}\rfloor$$<br>$$tileY=\lfloor{(\frac{1}{2}-\frac{\ln(\tan(lat\times\pi/180)+\sec(lat\times\pi/180))}{2\timesπ}})\times{2^{Level}}\rfloor$$</p>
+<ul>
+<li>经纬度坐标（lng, lat）转像素坐标（pixelX, pixelY）</li>
+</ul>
+<p>$$pixelX=\lfloor\frac{lng + 180}{360}\times{2^{Level}}\times256\%256\rfloor$$<br>$$pixelY=\lfloor{(1-\frac{\ln(\tan(lat\times\pi/180)+\sec(lat\times\pi/180))}{2\timesπ}})\times{2^{Level}}\times256\%256\rfloor$$</p>
+<ul>
+<li>瓦片（tileX， tileY）的像素坐标（pixelX, pixelY）转经纬度坐标（lng, lat）</li>
+</ul>
+<p>$$lng=\frac{tileX+\frac{pixelX}{256}}{2^{Level}}\times360-180$$<br>$$lat=\arctan({\sinh({\pi-2\times\pi\times\frac{tileY+\frac{pixelY}{256}}{2^{Level}}})})\times\frac{180}{\pi}$$</p>
+<h2 id="百度地图瓦片坐标"><a href="#百度地图瓦片坐标" class="headerlink" title="百度地图瓦片坐标"></a>百度地图瓦片坐标</h2><h3 id="坐标系定义-1"><a href="#坐标系定义-1" class="headerlink" title="坐标系定义"></a>坐标系定义</h3><p>百度地图的瓦片坐标系定义与高德地图并不相同，其墨卡托投影的参数也不同。百度地图瓦片坐标以墨卡托投影地图中赤道与0º经线相交位置为原点，沿着赤道往左方向为X轴，沿着0º经线向上方向为Y轴。<br>百度瓦片坐标定义了另一种二维坐标系，称为<strong>百度平面坐标系</strong>。百度平面坐标系的坐标原点与百度瓦片坐标原点相同，以瓦片等级18级为基准，规定18级时百度平面坐标的一个单位等于屏幕上的一个像素。平面坐标与地图所展示的级别没有关系，也就是说在1级和18级下，同一个经纬度坐标的百度平面坐标都是一致的。</p>
+<p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/百度地图Level=2的瓦片坐标编号情况.jpg" alt="百度地图Level=2的瓦片坐标编号情况" title="百度地图Level=2的瓦片坐标编号情况"></p>
+<p>此时X方向和Y方向各有4个瓦片编号，但是外围的某些瓦片只有部分区域有地图或完全没有地图。没有地图的区域也可以认为其瓦片是无效的，即百度地图中X方向或Y方向的有效瓦片不一定达到$2^{Level}$个。<br>中国大概位于百度瓦片坐标的（0，0）中。</p>
+<h3 id="坐标转换图解-1"><a href="#坐标转换图解-1" class="headerlink" title="坐标转换图解"></a>坐标转换图解</h3><p><img src="/img/国内主要地图瓦片坐标系定义及计算原理/百度地图坐标转换图解.png" alt="百度地图坐标转换图解" title="百度地图坐标转换图解"></p>
+<p>从百度地图坐标转换图解中可以看出，百度地图的坐标转换具有以下特点：</p>
+<ul>
+<li>百度经纬度坐标与百度平面坐标可以直接相互转换，并且与瓦片地图等级无关。</li>
+<li>经纬度坐标需要先转换为平面坐标，然后才能在某一瓦片等级下转换为瓦片坐标和瓦片像素坐标。</li>
+<li>瓦片像素坐标需要结合其瓦片坐标才能得到该像素坐标的平面坐标，然后再转换为经纬度坐标。</li>
+</ul>
+<h3 id="坐标转换公式-1"><a href="#坐标转换公式-1" class="headerlink" title="坐标转换公式"></a>坐标转换公式</h3><p>方法参考：<a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="external">百度地图API详解之地图坐标系统</a><br>发现百度JavaScript API的一个bug:<a href="http://cntchen.github.io/2016/05/09/百度JavaScirpt%20%20API中经纬度坐标转瓦片坐标bug/">百度JavaScript API中经纬度坐标转瓦片坐标bug</a></p>
+<ul>
+<li><p>经纬度坐标(lng， lat)转平面坐标（pointX, pointY）<br>百度经纬度坐标与百度平面坐标的相互转换，并没有公开的公式，需要通过百度地图的API实现。<br><em>主要代码为：</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// Bmap为百度JavaScript API V2.0的地图对象</div><div class="line">  lnglatToPoint(longitude, latitude) &#123;</div><div class="line">    let projection = new BMap.MercatorProjection();</div><div class="line">    let lnglat = new BMap.Point(longitude, latitude);</div><div class="line">    let point = projection.lngLatToPoint(lnglat);</div><div class="line"></div><div class="line">    return &#123;</div><div class="line">      pointX: point.x,</div><div class="line">      pointY: point.y</div><div class="line">    &#125;;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>平面坐标（pointX, pointY）转经纬度坐标(lng， lat)<br>也需要通过百度地图的API实现。<br><em>主要代码为：</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">pointToLnglat(pointX, pointY) &#123;</div><div class="line">  let projection = new BMap.MercatorProjection();</div><div class="line">  let point = new BMap.Pixel(pointX, pointY);</div><div class="line">  let lnglat = projection.pointToLngLat(point);</div><div class="line"></div><div class="line">  return &#123;</div><div class="line">    lng: lnglat.lng,</div><div class="line">    lat: lnglat.lat</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>平面坐标（pointX, pointY）转瓦片坐标（tileX， tileY）</p>
+</li>
+</ul>
+<p>$$tileX=\lfloor\frac{pointX\times2^{Level-18}}{256}\rfloor$$<br>$$tileY=\lfloor\frac{pointY\times2^{Level-18}}{256}\rfloor$$</p>
+<ul>
+<li>平面坐标（pointX, pointY）转像素坐标（pixelX, pixelY）</li>
+</ul>
+<p>$$pixelX=\lfloor{pointX\times2^{Level-18}-\lfloor\frac{pointX\times2^{Level-18}}{256}\rfloor\times256}\rfloor$$<br>$$pixelY=\lfloor{pointY\times2^{Level-18}-{\lfloor\frac{pointY\times2^{Level-18}}{256}\rfloor\times256}}\rfloor$$</p>
+<ul>
+<li>瓦片（tileX， tileY）的像素坐标（pixelX, pixelY）转平面坐标（pointX, pointY）</li>
+</ul>
+<p>$$pointX=\frac{tileX\times256+pixelX}{2^{Level-18}}$$<br>$$pointY=\frac{tileY\times256+pixelY}{2^{Level-18}}$$</p>
+<ul>
+<li><strong>经纬度坐标与瓦片坐标、像素坐标的相互转换，以平面坐标为中间量进行转换。</strong></li>
+</ul>
+<h3 id="吐槽"><a href="#吐槽" class="headerlink" title="吐槽"></a>吐槽</h3><p>百度地图JavaScript的代码非常奇葩，非常迷惑：<br>经纬度类是<code>Point</code>,平面坐标类是<code>Pixel</code>。<br>经纬度转平面坐标是<code>lngLatToPoint</code>，接收一个<code>Point</code>对象，返回一个<code>Pixel</code>对象。<br>平面坐标转经纬度坐标是在<code>pointToLngLat</code>，接收<code>Pixel</code>对象，返回一个<code>Point</code>对象。<br>WTF!</p>
+<h2 id="转换类库"><a href="#转换类库" class="headerlink" title="转换类库"></a>转换类库</h2><p>本文笔者根据前文介绍的经纬度坐标与瓦片坐标、像素坐标相互转换规则，编写了一个JavaScript类库–<a href="https://github.com/CntChen/tile-lnglat-transform" target="_blank" rel="external">tile-lnglat-transform</a>，提供了高德地图、百度地图、谷歌地图的经纬度坐标与瓦片坐标的相互转换。该模块是使用了<code>UMD</code>模块打包方式，可以在node和broswer中使用。<br>类库地址：<a href="https://github.com/CntChen/tile-lnglat-transform" target="_blank" rel="external">https://github.com/CntChen/tile-lnglat-transform</a><br>该类库的详细信息及使用方法请在项目主页中查看。</p>
+<h2 id="瓦片地图等级范围"><a href="#瓦片地图等级范围" class="headerlink" title="瓦片地图等级范围"></a>瓦片地图等级范围</h2><ul>
+<li>瓦片地图等级范围反映了地图可缩放的程度。</li>
+<li>虽然最小的瓦片等级是0，但是部分地图并不提供0级或其他较小瓦片等级的地图，因为此时的世界地图将会很小，不能铺满用户设备窗口。</li>
+</ul>
+<p>经过实际测试，各地图服务商的瓦片等级和测试链接如下：</p>
+<ul>
+<li>百度图片瓦片的层级是<strong>[3~18]</strong> <a href="http://online1.map.bdimg.com/onlinelabel/?qt=tile&amp;x=49310&amp;y=10242&amp;z=18" target="_blank" rel="external">http://online1.map.bdimg.com/onlinelabel/?qt=tile&amp;x=49310&amp;y=10242&amp;z=18</a></li>
+<li>百度主页的层级是<strong>[3~19]</strong> <a href="http://map.baidu.com/" target="_blank" rel="external">http://map.baidu.com/</a></li>
+<li>高德图片瓦片的层级是<strong>[1~19]</strong> <a href="http://wprd03.is.autonavi.com/appmaptile?style=7&amp;x=427289&amp;y=227618&amp;z=19" target="_blank" rel="external">http://wprd03.is.autonavi.com/appmaptile?style=7&amp;x=427289&amp;y=227618&amp;z=19</a></li>
+<li><p>高德地图官网介绍的<a href="http://lbs.amap.com/api/javascript-api/reference/map/" target="_blank" rel="external">高德地图层级</a>：</p>
+<blockquote>
+<p>获取当前地图缩放级别,在PC上，默认取值范围为[3,18]；在移动设备上，默认取值范围为[3-19]</p>
+</blockquote>
+</li>
+<li><p>谷歌地图瓦片层级是<strong>[0~21]</strong> <a href="http://mt2.google.cn/vt/lyrs=m@167000000&amp;hl=zh-CN&amp;gl=cn&amp;x=1709157&amp;y=910472&amp;z=21&amp;s=Galil" target="_blank" rel="external">http://mt2.google.cn/vt/lyrs=m@167000000&amp;hl=zh-CN&amp;gl=cn&amp;x=1709157&amp;y=910472&amp;z=21&amp;s=Galil</a></p>
+</li>
+</ul>
+<h2 id="需注意的问题"><a href="#需注意的问题" class="headerlink" title="需注意的问题"></a>需注意的问题</h2><ul>
+<li>瓦片像素坐标的起始点<ul>
+<li>高德地图、谷歌地图的瓦片坐标起点在左上角，像素坐标（pixelX, pixelY）在瓦片中的起点为左上角。</li>
+<li>百度地图中，像素坐标（pixelX, pixelY）的起点为左下角。</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>瓦片地图服务</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Tile_Map_Service" target="_blank" rel="external">https://en.wikipedia.org/wiki/Tile_Map_Service</a></p>
+</blockquote>
+<p>node-canvas实现百度地图个性化底图绘制</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/well1010/articles/baidu-map-node-canvas.html" target="_blank" rel="external">http://www.cnblogs.com/well1010/articles/baidu-map-node-canvas.html</a></p>
+</blockquote>
+<p>tile-lnglat-transform</p>
+<blockquote>
+<p><a href="https://github.com/CntChen/tile-lnglat-transform" target="_blank" rel="external">https://github.com/CntChen/tile-lnglat-transform</a></p>
+</blockquote>
+<p>coordtransform</p>
+<blockquote>
+<p><a href="https://github.com/wandergis/coordtransform" target="_blank" rel="external">https://github.com/wandergis/coordtransform</a></p>
+</blockquote>
+<p>地图投影的N种姿势</p>
+<blockquote>
+<p><a href="http://blog.sina.com.cn/s/blog_517eed9f0102w4rm.html" target="_blank" rel="external">http://blog.sina.com.cn/s/blog_517eed9f0102w4rm.html</a></p>
+</blockquote>
+<p>Web Mercator</p>
+<blockquote>
+<p><a href="https://en.wikipedia.org/wiki/Web_Mercator" target="_blank" rel="external">https://en.wikipedia.org/wiki/Web_Mercator</a></p>
+</blockquote>
+<p>Slippy map tilenames</p>
+<blockquote>
+<p><a href="http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames" target="_blank" rel="external">http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames</a></p>
+</blockquote>
+<p>百度地图API详解之地图坐标系统</p>
+<blockquote>
+<p><a href="http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html" target="_blank" rel="external">http://www.cnblogs.com/jz1108/archive/2011/07/02/2095376.html</a></p>
+</blockquote>
+<p>百度JavaScript API中经纬度坐标转瓦片坐标bug</p>
+<blockquote>
+<p><a href="http://cntchen.github.io/2016/05/09/百度JavaScirpt%20%20API中经纬度坐标转瓦片坐标bug/">http://cntchen.github.io/2016/05/09/百度JavaScirpt%20%20API中经纬度坐标转瓦片坐标bug/</a></p>
+</blockquote>
+<p>高德地图层级</p>
+<blockquote>
+<p><a href="http://lbs.amap.com/api/javascript-api/reference/map/" target="_blank" rel="external">http://lbs.amap.com/api/javascript-api/reference/map/</a></p>
+</blockquote>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/瓦片-地图-JS-坐标/" rel="tag"># 瓦片 地图 JS 坐标</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/" rel="next" title="百度JavaScript API中经纬度坐标转瓦片坐标bug">
+                <i class="fa fa-chevron-left"></i> 百度JavaScript API中经纬度坐标转瓦片坐标bug
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/09/写博客使用MathJax/" rel="prev" title="写博客使用MathJax">
+                写博客使用MathJax <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2016/05/09/国内主要地图瓦片坐标系定义及计算原理/"
+           data-title="国内主要地图瓦片坐标系定义及计算原理" data-url="http://cntchen.github.io/2016/05/09/国内主要地图瓦片坐标系定义及计算原理/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要经纬度坐标系"><span class="nav-number">2.</span> <span class="nav-text">主要经纬度坐标系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#墨卡托投影"><span class="nav-number">3.</span> <span class="nav-text">墨卡托投影</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#值得注意的是"><span class="nav-number">3.0.1.</span> <span class="nav-text">值得注意的是:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瓦片切割和瓦片坐标"><span class="nav-number">4.</span> <span class="nav-text">瓦片切割和瓦片坐标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高德地图瓦片坐标"><span class="nav-number">5.</span> <span class="nav-text">高德地图瓦片坐标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标系定义"><span class="nav-number">5.1.</span> <span class="nav-text">坐标系定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标转换图解"><span class="nav-number">5.2.</span> <span class="nav-text">坐标转换图解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标转换公式"><span class="nav-number">5.3.</span> <span class="nav-text">坐标转换公式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#百度地图瓦片坐标"><span class="nav-number">6.</span> <span class="nav-text">百度地图瓦片坐标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标系定义-1"><span class="nav-number">6.1.</span> <span class="nav-text">坐标系定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标转换图解-1"><span class="nav-number">6.2.</span> <span class="nav-text">坐标转换图解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#坐标转换公式-1"><span class="nav-number">6.3.</span> <span class="nav-text">坐标转换公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#吐槽"><span class="nav-number">6.4.</span> <span class="nav-text">吐槽</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转换类库"><span class="nav-number">7.</span> <span class="nav-text">转换类库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#瓦片地图等级范围"><span class="nav-number">8.</span> <span class="nav-text">瓦片地图等级范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需注意的问题"><span class="nav-number">9.</span> <span class="nav-text">需注意的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">10.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number">11.</span> <span class="nav-text">完</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

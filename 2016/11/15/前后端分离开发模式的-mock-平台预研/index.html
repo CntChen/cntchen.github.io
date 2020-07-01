@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前后端分离 mock AJAX 工作流 前端," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文地址 引入mock（模拟）: 是在项目测试中，对项目外部或不容易获取的对象/接口，用一个虚拟的对象/接口来模拟，以便测试。 背景前后端分离 前后端仅仅通过异步接口(AJAX/JSONP)来编程 前后端都各自有自己的开发流程，构建工具，测试集合 关注点分离，前后端变得相对独立并松耦合   开发流程 后台编写和维护接口文档，在 API 变化时更新接口文档 后台根据接口文档进行接口开发 前端根据接口">
+<meta name="keywords" content="前后端分离 mock AJAX 工作流 前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前后端分离开发模式的 mock 平台预研">
+<meta property="og:url" content="http://cntchen.github.io/2016/11/15/前后端分离开发模式的-mock-平台预研/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="原文地址 引入mock（模拟）: 是在项目测试中，对项目外部或不容易获取的对象/接口，用一个虚拟的对象/接口来模拟，以便测试。 背景前后端分离 前后端仅仅通过异步接口(AJAX/JSONP)来编程 前后端都各自有自己的开发流程，构建工具，测试集合 关注点分离，前后端变得相对独立并松耦合   开发流程 后台编写和维护接口文档，在 API 变化时更新接口文档 后台根据接口文档进行接口开发 前端根据接口">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/前后端分离_new.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/开发流程.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/接口书写转换为接口文档.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/接口文档服务器.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/map_local_public.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/map_rule_public.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/map_remote.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/rewrite_data_public.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/rewrite_cors_public.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/接口服务器_new.png">
+<meta property="og:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/mock服务器_new.png">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.023Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前后端分离开发模式的 mock 平台预研">
+<meta name="twitter:description" content="原文地址 引入mock（模拟）: 是在项目测试中，对项目外部或不容易获取的对象/接口，用一个虚拟的对象/接口来模拟，以便测试。 背景前后端分离 前后端仅仅通过异步接口(AJAX/JSONP)来编程 前后端都各自有自己的开发流程，构建工具，测试集合 关注点分离，前后端变得相对独立并松耦合   开发流程 后台编写和维护接口文档，在 API 变化时更新接口文档 后台根据接口文档进行接口开发 前端根据接口">
+<meta name="twitter:image" content="http://cntchen.github.io/img/前后端分离开发模式的mock平台预研/前后端分离_new.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2016/11/15/前后端分离开发模式的-mock-平台预研/"/>
+
+
+
+
+
+  <title>前后端分离开发模式的 mock 平台预研 | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2016/11/15/前后端分离开发模式的-mock-平台预研/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前后端分离开发模式的 mock 平台预研</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-15T23:53:30+08:00">
+                2016-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/11/15/前后端分离开发模式的-mock-平台预研/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/15/前后端分离开发模式的-mock-平台预研/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/CntChen/cntchen.github.io/issues/1" target="_blank" rel="external">原文地址</a></p>
+<h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p><em>mock（模拟）: 是在项目测试中，对项目外部或不容易获取的对象/接口，<strong>用一个虚拟的对象/接口来模拟</strong>，以便测试。</em></p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="前后端分离"><a href="#前后端分离" class="headerlink" title="前后端分离"></a>前后端分离</h3><ul>
+<li>前后端仅仅通过异步接口(AJAX/JSONP)来编程</li>
+<li>前后端都各自有自己的开发流程，构建工具，测试集合</li>
+<li>关注点分离，前后端变得相对独立并松耦合</li>
+</ul>
+<p><img src="/img/前后端分离开发模式的mock平台预研/前后端分离_new.png" alt="前后端分离.png"></p>
+<h3 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h3><ul>
+<li>后台编写和维护接口文档，在 API 变化时更新接口文档</li>
+<li>后台根据接口文档进行接口开发</li>
+<li>前端根据接口文档进行开发</li>
+<li>开发完成后联调和提交测试</li>
+</ul>
+<p><img src="/img/前后端分离开发模式的mock平台预研/开发流程.png" alt="开发流程.png"></p>
+<h3 id="面临问题"><a href="#面临问题" class="headerlink" title="面临问题"></a>面临问题</h3><ul>
+<li>没有统一的文档编写规范，导致文档越来越乱，无法维护和阅读</li>
+<li>开发中的接口增删改等变动，需要较大的沟通成本</li>
+<li><strong>对于一个新需求，前端开发的接口调用和自测依赖后台开发完毕</strong></li>
+<li><strong>将接口的风险后置，耽误项目时间</strong></li>
+</ul>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><ul>
+<li>接口文档服务器 – 解决接口文档编辑和维护的问题</li>
+<li>mock 数据 – 解决前端开发依赖真实后台接口的问题</li>
+</ul>
+<h2 id="接口文档服务器"><a href="#接口文档服务器" class="headerlink" title="接口文档服务器"></a>接口文档服务器</h2><h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><h4 id="接口编辑功能"><a href="#接口编辑功能" class="headerlink" title="接口编辑功能"></a>接口编辑功能</h4><ul>
+<li><p>类型1：根据接口描述语法书写接口，并保存为文本文件，然后使用生成工具生成在线接文档（HTML）<br>– 也有一些类似 Markdown 的接口文档编辑器，参见：<a href="https://apievangelist.com/2014/11/21/there-are-four-api-design-editors-to-choose-from-now/" target="_blank" rel="external">There Are Four API Design Editors To Choose From Now</a>。<br><img src="/img/前后端分离开发模式的mock平台预研/接口书写转换为接口文档.png" alt="接口书写转换为接口文档.png"></p>
+</li>
+<li><p>类型2：提供在线的接口编辑平台，进行可交互的接口编辑<br><img src="/img/前后端分离开发模式的mock平台预研/接口文档服务器.png" alt="接口文档服务器.png"></p>
+</li>
+</ul>
+<h4 id="接口查看功能"><a href="#接口查看功能" class="headerlink" title="接口查看功能"></a>接口查看功能</h4><ul>
+<li>提供友好的接口文档查看功能</li>
+</ul>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><ul>
+<li>后台开发人员进行接口文档编写<br>– 定义接口路径、接口上传字段、接口返回字段、字段含义、字段类型、字段取值</li>
+<li>前端开发人员查看接口文档</li>
+</ul>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>统一管理和维护接口文档<br>– 提供了接口导入、接口模块化、接口版本化、可视化编辑等功能</li>
+<li>接口文档规范，可读性强，<strong>减少前后端接口沟通成本</strong></li>
+</ul>
+<h2 id="前端-mock-方法回顾"><a href="#前端-mock-方法回顾" class="headerlink" title="前端 mock 方法回顾"></a>前端 mock 方法回顾</h2><p>前端开发过程中，使用 mock 数据来模拟接口的返回，对开发的代码进行业务逻辑测试。解决开发过程中对后台接口的依赖。</p>
+<h3 id="硬编码数据"><a href="#硬编码数据" class="headerlink" title="硬编码数据"></a>硬编码数据</h3><p>将 mock 数据写在代码中。</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// $.ajax(&#123;</span></div><div class="line"><span class="comment">//   url: ‘https://cntchen.github.io/userInfo’,</span></div><div class="line"><span class="comment">//   type: 'GET',</span></div><div class="line"><span class="comment">//   success: function(dt) &#123;</span></div><div class="line">    <span class="keyword">var</span> dt = &#123;</div><div class="line">      <span class="string">"isSuccess"</span>: <span class="literal">true</span>,</div><div class="line">      <span class="string">"errMsg"</span>: <span class="string">"This is error."</span>,</div><div class="line">      <span class="string">"data"</span>: &#123;</div><div class="line">        <span class="string">"userName"</span>: <span class="string">"Cntchen"</span>,</div><div class="line">        <span class="string">"about"</span>: <span class="string">"FE"</span></div><div class="line">      &#125;,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">if</span> (dt.isSuccess) &#123;</div><div class="line">      render(dt.data);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">console</span>.log(dt.errMsg);</div><div class="line">    &#125;</div><div class="line"><span class="comment">//   &#125;,</span></div><div class="line"><span class="comment">//   fail: function() &#123;&#125;</span></div><div class="line"><span class="comment">// &#125;);</span></div></pre></td></tr></table></figure>
+<h4 id="优点-1"><a href="#优点-1" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>可以快速修改测试数据</li>
+</ul>
+<h4 id="痛点"><a href="#痛点" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li><strong>无法模拟异步的网络请求，无法测试网络异常</strong></li>
+<li>肮代码，联调前需要做较多改动，<strong>增加最终上真实环境的切换成本</strong><br>– 添加网络请求，修改接口、添加错误控制逻辑</li>
+<li>接口文档变化需要手动更新</li>
+</ul>
+<h3 id="请求拦截-amp-mock-数据"><a href="#请求拦截-amp-mock-数据" class="headerlink" title="请求拦截 &amp; mock 数据"></a>请求拦截 &amp; mock 数据</h3><p>hijack（劫持）接口的网络请求，将请求的返回替换为代码中的 mock 数据。</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p><a href="https://github.com/jakerella/jquery-mockjax" target="_blank" rel="external">jquery-mockjax</a></p>
+<blockquote>
+<p>The jQuery Mockjax Plugin provides a simple and extremely flexible interface for mocking or simulating ajax requests and responses</p>
+</blockquote>
+<h4 id="优点-2"><a href="#优点-2" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>可以模拟异步的网络请求</li>
+<li>可以快速修改测试数据</li>
+</ul>
+<h4 id="痛点-1"><a href="#痛点-1" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li>依赖特定的框架，如<code>Jquery</code></li>
+<li>增加最终上真实环境的切换成本</li>
+<li>接口文档变换需要手动更新</li>
+</ul>
+<h3 id="本地-mock-服务器"><a href="#本地-mock-服务器" class="headerlink" title="本地 mock 服务器"></a>本地 mock 服务器</h3><p>将 mock 数据保存为本地文件。在前端调试的构建流中，用 node 开本地 mock 服务器，请求接口指向本地 mock 服务器，本地 mock 服务器 response mock 文件。</p>
+<h4 id="mock-文件"><a href="#mock-文件" class="headerlink" title="mock 文件"></a>mock 文件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.mock</div><div class="line">├── userInfo.json</div><div class="line">├── userStars.json</div><div class="line">├── blogs.json</div><div class="line">└── following.json</div></pre></td></tr></table></figure>
+<h4 id="接口调用"><a href="#接口调用" class="headerlink" title="接口调用"></a>接口调用</h4><p><code>https://github.com/CntChen/userInfo</code> –&gt; <code>localhost:port/userInfo</code></p>
+<h4 id="优点-3"><a href="#优点-3" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>对代码改动较小，联调测试只需要改动接口 url</li>
+<li>可以快速修改测试数据</li>
+</ul>
+<h4 id="痛点-2"><a href="#痛点-2" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li>json 文件非常多</li>
+<li>接口文档变化需要手动更新</li>
+</ul>
+<h3 id="代理服务器"><a href="#代理服务器" class="headerlink" title="代理服务器"></a>代理服务器</h3><ul>
+<li>使用 <a href="http://www.charlesproxy.com/" target="_blank" rel="external">charles</a> 或 <a href="http://www.telerik.com/fiddler" target="_blank" rel="external">fiddler</a> 作为代理服务器</li>
+<li>使用代理服务器的 map（映射）&amp; rewrite（重写） 功能</li>
+</ul>
+<h4 id="map-local"><a href="#map-local" class="headerlink" title="map local"></a>map local</h4><ul>
+<li>接口请求的返回映射为本地 mock 数据<br><code>https://github.com/CntChen/userInfo</code> –&gt; <code>localPath/userInfo</code></li>
+</ul>
+<p><img src="/img/前后端分离开发模式的mock平台预研/map_local_public.png" alt="map local.png"></p>
+<ul>
+<li>编辑映射规则<br><img src="/img/前后端分离开发模式的mock平台预研/map_rule_public.png" alt="map rule.png"></li>
+</ul>
+<h4 id="map-remote"><a href="#map-remote" class="headerlink" title="map remote"></a>map remote</h4><ul>
+<li>接口请求的返回映射为另一个远程接口的调用<br><img src="/img/前后端分离开发模式的mock平台预研/map_remote.png" alt="map remote.png"></li>
+</ul>
+<h4 id="rewrite"><a href="#rewrite" class="headerlink" title="rewrite"></a>rewrite</h4><ul>
+<li><p>修改接口调用的 request 或 response，添加/删除/修改 HTTP request line/response line/headers/body<br><img src="/img/前后端分离开发模式的mock平台预研/rewrite_data_public.png" alt="rewrite data.png"></p>
+</li>
+<li><p>解决跨域问题<br>使用 map 后，接口调用的 response 不带 CORS headers，跨域请求在浏览器端会报错。需要重写接口返回的 header，添加 CORS 的字段。<br><img src="/img/前后端分离开发模式的mock平台预研/rewrite_cors_public.png" alt="rewrite cors.png"></p>
+</li>
+</ul>
+<h4 id="优点-4"><a href="#优点-4" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>前端直接请求真实接口，无需修改代码</li>
+<li>可以修改接口返回数据</li>
+</ul>
+<h4 id="痛点-3"><a href="#痛点-3" class="headerlink" title="痛点"></a>痛点</h4><ul>
+<li><strong>需要处理跨域问题</strong></li>
+<li><strong>一个变更需要代理服务器进行多处改动，配置效率低下</strong></li>
+<li>不支持 HTTP method 的区分<br>– CORS 的 preflight 请求(OPTION)也会返回数据</li>
+<li>需要有远程接口或本地 mock 文件，与使用本地 mock 文件相同的痛点</li>
+</ul>
+<h3 id="mock-平台"><a href="#mock-平台" class="headerlink" title="mock 平台"></a>mock 平台</h3><h4 id="接口文档服务器-1"><a href="#接口文档服务器-1" class="headerlink" title="接口文档服务器"></a>接口文档服务器</h4><p>使用接口文档服务器来定义接口数据结构</p>
+<p><img src="/img/前后端分离开发模式的mock平台预研/接口服务器_new.png" alt="接口服务器.jpg"></p>
+<h4 id="mock服务器"><a href="#mock服务器" class="headerlink" title="mock服务器"></a>mock服务器</h4><p><strong>mock 服务器根据接口文档自动生成 mock 数据</strong>，实现了接口文档即API</p>
+<p><img src="/img/前后端分离开发模式的mock平台预研/mock服务器_new.png" alt="mock服务器.jpg"></p>
+<h4 id="优点-5"><a href="#优点-5" class="headerlink" title="优点"></a>优点</h4><ul>
+<li>接口文档自动生成和更新 mock 数据</li>
+<li>前端代码联调时改动小</li>
+</ul>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li><strong>可能</strong>存在跨域问题</li>
+</ul>
+<h2 id="业界实践"><a href="#业界实践" class="headerlink" title="业界实践"></a>业界实践</h2><h3 id="公司实践"><a href="#公司实践" class="headerlink" title="公司实践"></a>公司实践</h3><p>没有找到公司级别的框架，除了阿里的 <a href="https://github.com/thx/RAP" target="_blank" rel="external">RAP</a>。可能原因：</p>
+<ul>
+<li>非关键性、开创性技术，没有太多研究价值</li>
+<li>许多大公司是小团队作战，没有统一的 mock 平台</li>
+<li>已经有一些稳定的接口，并不存在后台接口没有开发完成的问题<br>– 而我们想探究的问题是：前后端<strong>同时开发时</strong>的 mock</li>
+</ul>
+<h3 id="github-开源库"><a href="#github-开源库" class="headerlink" title="github 开源库"></a>github 开源库</h3><ul>
+<li><p><a href="https://github.com/marak/Faker.js/" target="_blank" rel="external">faker.js</a><br>随机生成固定字段的 mock 数据,如<code>email</code>，<code>date</code>，<code>images</code>等，支持国际化。</p>
+</li>
+<li><p><a href="https://apiblueprint.org/" target="_blank" rel="external">blueprint</a></p>
+<blockquote>
+<p>A powerful high-level API design language for web APIs.</p>
+</blockquote>
+<p>一种使用类markdown语法的接口编写语言，使用[json-schema][json-schema]和[mson][mson]作为接口字段描述。有<a href="https://apiblueprint.org/tools.html" target="_blank" rel="external">完善的工具链</a>进行接口文件 Edit，Test，Mock，Parse，Converter等。</p>
+</li>
+<li><p><a href="http://swagger.io/" target="_blank" rel="external">swagger</a></p>
+<blockquote>
+<p>Swagger是一种 Rest API 的简单但强大的表示方式，标准的，语言无关，这种表示方式不但人可读，而且机器可读。可以作为 Rest API 的交互式文档，也可以作为 Rest API 的形式化的接口描述，生成客户端和服务端的代码。 –<a href="https://zhuanlan.zhihu.com/p/21353795" target="_blank" rel="external">Swagger：Rest API的描述语言</a></p>
+</blockquote>
+<p>定义了一套接口文档编写语法，然后可以自动生成接口文档。相关项目: <a href="https://github.com/swagger-api/swagger-editor" target="_blank" rel="external">Swagger Editor</a> ，用于编写 API 文档。<a href="https://github.com/swagger-api/swagger-ui" target="_blank" rel="external">Swagger UI</a> restful 接口文档在线自动生成与功能测试软件。<a href="http://petstore.swagger.io/#!/pet/addPet" target="_blank" rel="external">点击查看Swagger-UI在线示例</a>。</p>
+</li>
+<li><p><a href="http://wiremock.org/" target="_blank" rel="external">wireMock</a></p>
+<blockquote>
+<p>WireMock is a simulator for HTTP-based APIs. Some might consider it a service virtualization tool or a mock server. It <strong>supports testing of edge cases and failure modes</strong> that the real API won’t reliably produce.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="商业化方案"><a href="#商业化方案" class="headerlink" title="商业化方案"></a>商业化方案</h3><ul>
+<li><a href="https://apiary.io/" target="_blank" rel="external">apiary</a><br>商业化方案，<a href="https://apiblueprint.org/" target="_blank" rel="external">blueprint</a>开源项目的创造者。界面化，提供mock功能，生成各编程语言的调用代码(跟 postman 的 generate code snippets类似)。</li>
+</ul>
+<h3 id="其他实践"><a href="#其他实践" class="headerlink" title="其他实践"></a>其他实践</h3><p><a href="https://apievangelist.com/" target="_blank" rel="external">API Evangelist(API 布道者)</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于前后端分离开发方式，已经有比较成熟的 mock 平台，主要解决了2个问题：</p>
+<ul>
+<li>接口文档的编辑和维护</li>
+<li>接口 mock 数据的自动生成和更新</li>
+</ul>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>预研时间比较有限，有一些新的 mock 模式或优秀的 mock 平台没有覆盖到，欢迎补充。<br>笔者所在公司选用的平台是 <a href="https://github.com/thx/RAP" target="_blank" rel="external">RAP</a>，后续会整理一篇 RAP 实践方面的文章。<br>问题来了：你开发中的 mock 方式是什么？</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li>图解基于node.js实现前后端分离<blockquote>
+<p><a href="http://yalishizhude.github.io/2016/04/19/front-back-separation/" target="_blank" rel="external">http://yalishizhude.github.io/2016/04/19/front-back-separation/</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>TestDouble(介绍 mock 相关的概念)<blockquote>
+<p><a href="http://martinfowler.com/bliki/TestDouble.html" target="_blank" rel="external">http://martinfowler.com/bliki/TestDouble.html</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>There Are Four API Design Editors To Choose From Now<blockquote>
+<p><a href="https://apievangelist.com/2014/11/21/there-are-four-api-design-editors-to-choose-from-now/" target="_blank" rel="external">https://apievangelist.com/2014/11/21/there-are-four-api-design-editors-to-choose-from-now/</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>联调之痛–契约测试<blockquote>
+<p><a href="http://www.ituring.com.cn/article/42460" target="_blank" rel="external">http://www.ituring.com.cn/article/42460</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>Swagger：Rest API的描述语言<blockquote>
+<p><a href="https://zhuanlan.zhihu.com/p/21353795" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/21353795</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>Swagger - 前后端分离后的契约<blockquote>
+<p><a href="http://www.cnblogs.com/whitewolf/p/4686154.html" target="_blank" rel="external">http://www.cnblogs.com/whitewolf/p/4686154.html</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>Swagger UI教程 API 文档神器 搭配Node使用<blockquote>
+<p><a href="http://www.jianshu.com/p/d6626e6bd72c#" target="_blank" rel="external">http://www.jianshu.com/p/d6626e6bd72c#</a></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2><hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前后端分离-mock-AJAX-工作流-前端/" rel="tag"># 前后端分离 mock AJAX 工作流 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/09/最合适的Ajax内容编码类型/" rel="next" title="最合适的Ajax内容编码类型">
+                <i class="fa fa-chevron-left"></i> 最合适的Ajax内容编码类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/11/Ubuntu16-10-迁移到-SSD/" rel="prev" title="Ubuntu16.10 迁移到 SSD">
+                Ubuntu16.10 迁移到 SSD <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2016/11/15/前后端分离开发模式的-mock-平台预研/"
+           data-title="前后端分离开发模式的 mock 平台预研" data-url="http://cntchen.github.io/2016/11/15/前后端分离开发模式的-mock-平台预研/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引入"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前后端分离"><span class="nav-number">2.1.</span> <span class="nav-text">前后端分离</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发流程"><span class="nav-number">2.2.</span> <span class="nav-text">开发流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面临问题"><span class="nav-number">2.3.</span> <span class="nav-text">面临问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方法"><span class="nav-number">2.4.</span> <span class="nav-text">解决方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口文档服务器"><span class="nav-number">3.</span> <span class="nav-text">接口文档服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能"><span class="nav-number">3.1.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口编辑功能"><span class="nav-number">3.1.1.</span> <span class="nav-text">接口编辑功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口查看功能"><span class="nav-number">3.1.2.</span> <span class="nav-text">接口查看功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用法"><span class="nav-number">3.2.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">3.3.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端-mock-方法回顾"><span class="nav-number">4.</span> <span class="nav-text">前端 mock 方法回顾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬编码数据"><span class="nav-number">4.1.</span> <span class="nav-text">硬编码数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#示例"><span class="nav-number">4.1.1.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点-1"><span class="nav-number">4.1.2.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#痛点"><span class="nav-number">4.1.3.</span> <span class="nav-text">痛点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求拦截-amp-mock-数据"><span class="nav-number">4.2.</span> <span class="nav-text">请求拦截 & mock 数据</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实例"><span class="nav-number">4.2.1.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点-2"><span class="nav-number">4.2.2.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#痛点-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">痛点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地-mock-服务器"><span class="nav-number">4.3.</span> <span class="nav-text">本地 mock 服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mock-文件"><span class="nav-number">4.3.1.</span> <span class="nav-text">mock 文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口调用"><span class="nav-number">4.3.2.</span> <span class="nav-text">接口调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点-3"><span class="nav-number">4.3.3.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#痛点-2"><span class="nav-number">4.3.4.</span> <span class="nav-text">痛点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理服务器"><span class="nav-number">4.4.</span> <span class="nav-text">代理服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#map-local"><span class="nav-number">4.4.1.</span> <span class="nav-text">map local</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-remote"><span class="nav-number">4.4.2.</span> <span class="nav-text">map remote</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rewrite"><span class="nav-number">4.4.3.</span> <span class="nav-text">rewrite</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点-4"><span class="nav-number">4.4.4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#痛点-3"><span class="nav-number">4.4.5.</span> <span class="nav-text">痛点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mock-平台"><span class="nav-number">4.5.</span> <span class="nav-text">mock 平台</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#接口文档服务器-1"><span class="nav-number">4.5.1.</span> <span class="nav-text">接口文档服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mock服务器"><span class="nav-number">4.5.2.</span> <span class="nav-text">mock服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优点-5"><span class="nav-number">4.5.3.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缺点"><span class="nav-number">4.5.4.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#业界实践"><span class="nav-number">5.</span> <span class="nav-text">业界实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公司实践"><span class="nav-number">5.1.</span> <span class="nav-text">公司实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#github-开源库"><span class="nav-number">5.2.</span> <span class="nav-text">github 开源库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#商业化方案"><span class="nav-number">5.3.</span> <span class="nav-text">商业化方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他实践"><span class="nav-number">5.4.</span> <span class="nav-text">其他实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后记"><span class="nav-number">7.</span> <span class="nav-text">后记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">8.</span> <span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">9.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

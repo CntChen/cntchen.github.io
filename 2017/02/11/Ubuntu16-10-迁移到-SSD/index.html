@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Linux OS," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Ubuntu16.10 迁移到 SSD背景2016年双十一入手了一块500G的 SSD（Solid State Drive，固态硬盘），打算安装到自己的笔记本上。笔记本的 HDD（Hard Disk Drive，机械硬盘）已经跑了 Ubuntu16.10 + Win10 双系统。光驱位的硬盘支架也装好了，一直虚位以待。工作忙一直拖到了2017年。 公司的 PC 机器也是 Ubuntu16.10，并">
+<meta name="keywords" content="Linux OS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu16.10 迁移到 SSD">
+<meta property="og:url" content="http://cntchen.github.io/2017/02/11/Ubuntu16-10-迁移到-SSD/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="Ubuntu16.10 迁移到 SSD背景2016年双十一入手了一块500G的 SSD（Solid State Drive，固态硬盘），打算安装到自己的笔记本上。笔记本的 HDD（Hard Disk Drive，机械硬盘）已经跑了 Ubuntu16.10 + Win10 双系统。光驱位的硬盘支架也装好了，一直虚位以待。工作忙一直拖到了2017年。 公司的 PC 机器也是 Ubuntu16.10，并">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/partition-result.png">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/create-gpt.png">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/bios-grub-partition.png">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/set-bios-grub-flag.png">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/grub-loader.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/GNU_GRUB_components.svg">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/GRUB-Prompt-crop.png">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/grub-loader.jpg">
+<meta property="og:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/old-disk-partition.png">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu16.10 迁移到 SSD">
+<meta name="twitter:description" content="Ubuntu16.10 迁移到 SSD背景2016年双十一入手了一块500G的 SSD（Solid State Drive，固态硬盘），打算安装到自己的笔记本上。笔记本的 HDD（Hard Disk Drive，机械硬盘）已经跑了 Ubuntu16.10 + Win10 双系统。光驱位的硬盘支架也装好了，一直虚位以待。工作忙一直拖到了2017年。 公司的 PC 机器也是 Ubuntu16.10，并">
+<meta name="twitter:image" content="http://cntchen.github.io/img/Ubuntu16.10_迁移到_SSD/partition-result.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2017/02/11/Ubuntu16-10-迁移到-SSD/"/>
+
+
+
+
+
+  <title>Ubuntu16.10 迁移到 SSD | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2017/02/11/Ubuntu16-10-迁移到-SSD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Ubuntu16.10 迁移到 SSD</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T01:57:06+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/11/Ubuntu16-10-迁移到-SSD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/11/Ubuntu16-10-迁移到-SSD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Ubuntu16-10-迁移到-SSD"><a href="#Ubuntu16-10-迁移到-SSD" class="headerlink" title="Ubuntu16.10 迁移到 SSD"></a>Ubuntu16.10 迁移到 SSD</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>2016年双十一入手了一块500G的 SSD（Solid State Drive，固态硬盘），打算安装到自己的笔记本上。笔记本的 HDD（Hard Disk Drive，机械硬盘）已经跑了 Ubuntu16.10 + Win10 双系统。光驱位的硬盘支架也装好了，一直虚位以待。工作忙一直拖到了2017年。</p>
+<p>公司的 PC 机器也是 Ubuntu16.10，并且安装的软件比较齐全，所以计划将 PC 的 Ubuntu16.10 迁移到 SSD 上，然后在笔记本上运行。</p>
+<h2 id="开工准备"><a href="#开工准备" class="headerlink" title="开工准备"></a>开工准备</h2><ul>
+<li>Ubuntu16.10，PC 上安装，各项迁移步骤运行的环境并作为要迁移到 SSD 的系统。</li>
+<li><a href="http://gparted.sourceforge.net/" target="_blank" rel="external">Gparted Partition Editor</a>，图形化的分区工具。</li>
+<li>外接硬盘盒，通过 USB 线将 SSD 连接到 PC 上。</li>
+</ul>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>该章节是计算机启动和系统加载的一些概念，有助于加深对迁移原理的理解，注重实践的话可以直接跳过。</p>
+<p>总结不一定准确，仅作为个人理解。干货可以看这篇文章：<a href="https://www.happyassassin.net/2014/01/25/uefi-boot-how-does-that-actually-work-then/" target="_blank" rel="external">uefi-boot-how-does-that-actually-work-then</a></p>
+<h3 id="BIOS-vs-UEFI"><a href="#BIOS-vs-UEFI" class="headerlink" title="BIOS vs UEFI"></a>BIOS vs UEFI</h3><p>BIOS（Basic Input/Output System）和 UEFI（Unified Extensible Firmware Interface ）<strong>是不同的计算机启动固件（Fireware）</strong>，需要硬件（通常为主板）支持，相互代替的，其中 UEFI 是比较新的方式。</p>
+<ul>
+<li>BIOS<br>经典的启动固件，会调用磁盘的 <a href="https://en.wikipedia.org/wiki/Master_boot_record" target="_blank" rel="external">MBR</a>，然后由 MBR 中的 loader 继续加载操作系统。</li>
+<li><p>UEFI<br>UEFI 用来代替 BIOS，并克服 BIOS 的缺点，大多数的 UEFI 固件会提供兼容 BIOS 的启动方式。</p>
+</li>
+<li><p>区别<br>可以看这篇文章：<a href="http://www.ihacksoft.com/uefi.html" target="_blank" rel="external">UEFI是什么？与BIOS的区别在哪里?</a></p>
+</li>
+</ul>
+<h3 id="MBR-vs-GPT"><a href="#MBR-vs-GPT" class="headerlink" title="MBR vs GPT"></a>MBR vs GPT</h3><p>MBR 与 <a href="https://en.wikipedia.org/wiki/GUID_Partition_Table" target="_blank" rel="external">GPT</a> 用于存储硬盘的分区信息，<strong>是不同的硬盘分区表类型</strong>。</p>
+<ul>
+<li><p>MBR<br><strong>MBR 表示 MBR 分区表</strong>，MBR 分区表在硬盘开头处存放了特殊的启动分区，称为 MBR（Master Boot Record，<strong>主启动记录</strong>），包含 Boot Loader 和硬盘逻辑分区。MBR 支持最大约2T的硬盘，最多能划分4个主分区，更多分区需要使用拓展分区实现。<br><em>（<code>MBR</code>在行文中可以表示 <code>MBR 分区表</code>和<code>主启动记录</code>两个意思，注意甄别。）</em></p>
+</li>
+<li><p>GPT<br>GPT 表示 GUID（Globally Unique Identifier） 分区表，是 UEFI 规范的一部分，用于替换 MBR 的分区方式。GPT 没有分区数和分区大小限制。</p>
+</li>
+<li><p>区别<br>可以看这篇文章：<a href="http://www.howtogeek.com/193669/whats-the-difference-between-gpt-and-mbr-when-partitioning-a-drive/" target="_blank" rel="external">What’s the Difference Between GPT and MBR When Partitioning a Drive</a></p>
+</li>
+</ul>
+<h3 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h3><p><a href="https://en.wikipedia.org/wiki/File_system" target="_blank" rel="external">File System</a>（文件系统）是存储媒介中文件存储的组织方式。<br>不同的文件系统类型有不同的速度，灵活性，安全性和占用空间。不同操作系统只支持特定的文件系统类型。<br>常见的文件系统类型有 FAT16，FAT32，NTFS，EXT3，EXT4，HFS 等。</p>
+<h3 id="磁盘发展史"><a href="#磁盘发展史" class="headerlink" title="磁盘发展史"></a>磁盘发展史</h3><p>Wikipedia 上有许多关于磁盘的资料，在磁盘分区上，我<strong>猜测</strong>的发展脉络是这样的：</p>
+<ol>
+<li>磁盘跟内存一样直接物理寻址去访问数据；</li>
+<li>为了方便，建立数据 Index，有了 File System；</li>
+<li>需要多个分区，搞出了 Partition Tabel。</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>BIOS/UEFI 跟 MBR/GPT 是不同层级的，BIOS/UEFI 是 Fireware，MBR/GPT 是分区表。</li>
+<li><strong>推荐的使用方式</strong>： BIOS + MBR 或 UEFI + GPT：<blockquote>
+<p>If you want to do a ‘BIOS compatibility’ type installation, you probably want to install to an MBR formatted disk.<br>If you want to do a UEFI native installation, you probably want to install to a GPT formatted disk.</p>
+</blockquote>
+</li>
+<li>理论上来说是可以组合使用的：<blockquote>
+<p>Of course, to make life complicated, many firmwares can boot BIOS-style from a GPT formatted disk.<br>UEFI firmwares are in fact technically required to be able to boot UEFI-style from an MBR formatted disk.</p>
+</blockquote>
+</li>
+<li>Windows 通常会要求 UEFI 的启动方式使用 GPT，不然不给继续安装。</li>
+</ul>
+<h2 id="SSD-分区"><a href="#SSD-分区" class="headerlink" title="SSD 分区"></a>SSD 分区</h2><h3 id="硬盘状态"><a href="#硬盘状态" class="headerlink" title="硬盘状态"></a>硬盘状态</h3><p>使用外接硬盘盒，将 SSD 连接到 PC 机上，先查看硬盘状态：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">$ sudo fdisk -l</div><div class="line">Disk /dev/sda: <span class="number">465.8</span> GiB, <span class="number">500107862016</span> bytes, <span class="number">976773168</span> sectors</div><div class="line">Units: sectors <span class="keyword">of</span> <span class="number">1</span> * <span class="number">512</span> = <span class="number">512</span> bytes</div><div class="line">Sector size (logical/physical): <span class="number">512</span> bytes / <span class="number">4096</span> bytes</div><div class="line">I/O size (minimum/optimal): <span class="number">4096</span> bytes / <span class="number">4096</span> bytes</div><div class="line">Disklabel type: dos</div><div class="line">Disk identifier: <span class="number">0xb2708ce0</span></div><div class="line"></div><div class="line">Device     Boot     Start       End   Sectors   Size Id Type</div><div class="line">/dev/sda1  *         <span class="number">2048</span>    <span class="number">411647</span>    <span class="number">409600</span>   <span class="number">200</span>M  <span class="number">7</span> HPFS/NTFS/exFAT</div><div class="line">/dev/sda2          <span class="number">411648</span> <span class="number">210126847</span> <span class="number">209715200</span>   <span class="number">100</span>G  <span class="number">7</span> HPFS/NTFS/exFAT</div><div class="line">/dev/sda3       <span class="number">210128894</span> <span class="number">913704959</span> <span class="number">703576066</span> <span class="number">335.5</span>G  f W95 Ext<span class="string">'d (LBA)</span></div><div class="line"><span class="string">/dev/sda5       210128896 703989759 493860864 235.5G 83 Linux</span></div><div class="line"><span class="string">/dev/sda6       703991808 704966655    974848   476M 83 Linux</span></div><div class="line"><span class="string">/dev/sda7       704968704 764067839  59099136  28.2G 83 Linux</span></div><div class="line"><span class="string">/dev/sda8       764069888 771973119   7903232   3.8G 82 Linux swap / Solaris</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">Partition 3 does not start on physical sector boundary.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">Disk /dev/sdb: 489.1 GiB, 525112713216 bytes, 1025610768 sectors</span></div><div class="line"><span class="string">Units: sectors of 1 * 512 = 512 bytes</span></div><div class="line"><span class="string">Sector size (logical/physical): 512 bytes / 512 bytes</span></div><div class="line"><span class="string">I/O size (minimum/optimal): 512 bytes / 33553920 bytes</span></div></pre></td></tr></table></figure></p>
+<p>其中<code>/dev/sda</code>为 PC 上的硬盘，装有 Ubuntu16.10 + Win7；<code>/dev/sdb</code>为 SSD，当前 SSD 为空盘。</p>
+<h3 id="分区策略"><a href="#分区策略" class="headerlink" title="分区策略"></a>分区策略</h3><ul>
+<li>笔记本是 2011 年的机器，主板启动引导好像不支持 UEFI，是用 BIOS。</li>
+<li>考虑 SSD 的拓展性，<strong>分区表选择 GPL</strong>，选用的<strong>引导方式为 BIOS + GPT</strong>。</li>
+<li>此时安装 GRUB 引导对分区划分有要求，具体参考接下文的<em>《GRUB 引导》</em>章节。</li>
+<li><p>先上分区结果：<br><img src="/img/Ubuntu16.10_迁移到_SSD/partition-result.png" alt=""><br><em>（注：前文出现的<code>/dev/sdb1</code>，<code>/dev/sdf1</code>和后面可能出现的<code>/dev/sd#1</code>都为同一个分区，因为多次插拔了 SSD ，所以标识一直按字母序递增）</em></p>
+<ul>
+<li>不建立<code>/swap</code>分区了，因为 <a href="http://blog.surgut.co.uk/2016/12/swapfiles-by-default-in-ubuntu.html" target="_blank" rel="external">Ubuntu17.04也要移除 swap 分区</a>。</li>
+<li><code>/dev/sdf1</code>分区，建立 GRUB 引导所需分区，大小为 1M，分区文件类型为<code>unformatted</code>，分区 flag 为<code>bios_grub</code>。</li>
+<li><code>/dev/sdf2</code>分区，Linux <code>/boot</code>分区，大小 1G。</li>
+<li><code>/dev/sdf3</code>分区，Linux <code>/</code>分区，大小 50G。</li>
+<li><code>/dev/sdf4</code>分区，Linux <code>/home</code>分区，大小 300G。</li>
+</ul>
+</li>
+</ul>
+<h3 id="分区操作"><a href="#分区操作" class="headerlink" title="分区操作"></a>分区操作</h3><p>分区操作在 Gparted 软件中完成，命令行<code>fdisk</code>和<code>parted</code>也可以操作，但是我不熟悉。</p>
+<ul>
+<li><p>建立分区表<br>SSD 是一个空磁盘，此时并没有分区表，所以要先建立分区表。分区表的格式选用 GPT：</p>
+<ol>
+<li>打开 Gparted，点击 <code>Device</code> –&gt; <code>Created Partition Table</code>。</li>
+<li>选择<code>partition tabel type</code>为<code>gpt</code>，然后点击<code>Apply</code>。</li>
+</ol>
+<p><img src="/img/Ubuntu16.10_迁移到_SSD/create-gpt.png" alt=""></p>
+</li>
+<li><p>建立 GRUB 所需分区</p>
+<ol>
+<li><p>分区大小为1M，分区类型为<code>unformatted</code>。<br><img src="/img/Ubuntu16.10_迁移到_SSD/bios-grub-partition.png" alt=""></p>
+</li>
+<li><p>在新建的分区上点击右键，选择<code>managerFlags</code>，然后选中<code>bios_grub</code>选项。<br><img src="/img/Ubuntu16.10_迁移到_SSD/set-bios-grub-flag.png" alt=""></p>
+</li>
+</ol>
+</li>
+<li><p>建立 Linux 系统分区<br>根据上文<em>&lt;&lt;分区策略&gt;&gt;</em>章节，依次建立其他分区，分区的文件格式选择<code>ext4</code>。<br>分区结果：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo fdisk -l /dev/sdh</div><div class="line">Device         Start       End   Sectors  Size Type</div><div class="line">/dev/sdh1       <span class="number">2048</span>      <span class="number">4095</span>      <span class="number">2048</span>    <span class="number">1</span>M BIOS boot</div><div class="line">/dev/sdh2       <span class="number">4096</span>   <span class="number">2101247</span>   <span class="number">2097152</span>    <span class="number">1</span>G Linux filesystem</div><div class="line">/dev/sdh3    <span class="number">2101248</span> <span class="number">106958847</span> <span class="number">104857600</span>   <span class="number">50</span>G Linux filesystem</div><div class="line">/dev/sdh4  <span class="number">106958848</span> <span class="number">736104447</span> <span class="number">629145600</span>  <span class="number">300</span>G Linux filesystem</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="GRUB-引导"><a href="#GRUB-引导" class="headerlink" title="GRUB 引导"></a>GRUB 引导</h2><h2 id="GRUB-是什么"><a href="#GRUB-是什么" class="headerlink" title="GRUB 是什么"></a>GRUB 是什么</h2><p><a href="https://en.wikipedia.org/wiki/GNU_GRUB" target="_blank" rel="external">GRUB</a>（Grand Unified Boot loader）是硬盘中的软件，引导器（loader）的一种。目前主流版本是 GRUB2，可以看 <a href="https://my.oschina.net/guol/blog/37373" target="_blank" rel="external">GRUB2 中文介绍</a>。</p>
+<p>GRUB 用于从多操作系统的计算机中选择一个系统来启动，或从系统分区中选择特殊的内核配置。</p>
+<blockquote>
+<p>provides a user the choice to boot one of multiple operating systems installed on a computer or select a specific kernel configuration available on a particular operating system’s partitions. – <a href="https://en.wikipedia.org/wiki/GNU_GRUB" target="_blank" rel="external">GRUB</a></p>
+</blockquote>
+<p>示例：<br><img src="/img/Ubuntu16.10_迁移到_SSD/grub-loader.jpg" alt=""><br>如图：第一个选项和最后一个选项是选择不同的操作系统；第一个选项和第二个选项是选择不同的内核配置。</p>
+<h3 id="GRUB-位置"><a href="#GRUB-位置" class="headerlink" title="GRUB 位置"></a>GRUB 位置</h3><p>其启动代码（boot.img）直接安装在 MBR 中，然后执行 GRUB 内核镜像（core.img），最后从<code>/boot/grub</code>中读取配置和其他功能代码。<br>BIOS 引导方式中，MBR 分区表和 GPT 分区表的 <a href="https://en.wikipedia.org/wiki/BIOS_boot_partition" target="_blank" rel="external">GRUB 引导文件所放分区不同</a>：<br><img src="/img/Ubuntu16.10_迁移到_SSD/GNU_GRUB_components.svg" alt=""></p>
+<p>如图，GRUB 的执行顺序为 <code>boot.img</code> –&gt; <code>core.img</code> –&gt; <code>/boot/grub/</code>。</p>
+<ul>
+<li><p>在 MBR 分区表中，<code>boot.img</code> 和 <code>core.img</code> 都在 MBR 中。MBR 虽然只占用一个扇区(512Byte)，但是其所在的磁道是空闲的，不会用于分区，可以放下 <code>core.img</code>。</p>
+<blockquote>
+<p>Some MBR code loads additional code for a boot manager from the first track of the disk, which it assumes to be “free” space that is not allocated to any disk partition, and executes it.  – <a href="https://en.wikipedia.org/wiki/Master_boot_record" target="_blank" rel="external">MBR</a></p>
+</blockquote>
+</li>
+<li><p>在 GPT 分区表中，MBR 为 <a href="https://en.wikipedia.org/wiki/GUID_Partition_Table#Protective_MBR_.28LBA_0.29" target="_blank" rel="external">protected MBR</a>（为兼容 MBR，在硬盘起始位置保留的空间），后面并没有空间放<code>core.img</code>，需要建一个专门的分区来放，称为<a href="https://en.wikipedia.org/wiki/BIOS_boot_partition" target="_blank" rel="external">BIOS boot partition</a>，该分区的文件类型为<code>unformatted</code>，flag 为<code>BOIS_grub</code>，该 flag 用于标识<code>core.img</code>所要安装到的分区。若果使用 UEFI 引导，GRUB 读取的是 ESP 分区中的数据，不需要 flag 为 <code>BIOS_grub</code>的分区。</p>
+</li>
+</ul>
+<h3 id="建立-GRUB-引导"><a href="#建立-GRUB-引导" class="headerlink" title="建立 GRUB 引导"></a>建立 GRUB 引导</h3><p>使用 <a href="http://www.gnu.org/software/grub/manual/html_node/Installing-GRUB-using-grub_002dinstall.html" target="_blank" rel="external">grup-install 的教程</a>来安装 GRUB 到 SSD 盘。</p>
+<ul>
+<li><p>挂载 <code>/boot</code><br>挂载 SSD 的<code>/boot</code>为 PC Ubuntu 的<code>/mnt</code>，因为我们需要将 GRUB 配置文件放入 SSD 的<code>/boot/grub</code>中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo mount /dev/sdb2 /mnt</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装 GRUB<br>执行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo grub-install --target=i386-pc --root-directory=/mnt --recheck --debug /dev/sdb</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果看到以下输出，应该就是成功了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">Installation finished. No error reported.</div></pre></td></tr></table></figure></p>
+<p>此时<code>/mnt</code>目录下，应该有一个<code>./boot/grub</code>的文件夹：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/mnt/boot/grub ⌚ 20:54:33</div><div class="line">$ ls</div><div class="line">fonts  grubenv  i386-pc  locale</div></pre></td></tr></table></figure></p>
+<ul>
+<li>修复<code>/grub</code>位置<br>查看下 PC Ubuntu 的<code>/boot</code>,<code>/grub</code>是直接放置在<code>/boot</code>下的:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/boot/grub ⌚ 13:30:33</div><div class="line">$ ls</div><div class="line">fonts  gfxblacklist.txt  grub.cfg  grubenv  i386-pc  locale  unicode.pf2</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>而<code>grub-install /dev/sdb</code>安装的 GRUB 是<code>/mnt/boot/grub</code>，其中<code>/mnt</code>是 SSD <code>/dev/sdb2</code>分区，从 SSD 启动 Ubuntu 的话，<code>/dev/sdb2</code>会挂载为<code>/boot</code>，此时 GRUB 的位置是<code>/boot/boot/grub</code>。而当<code>grub-install /dev/dsa</code>安装 GRUB 到 PC Ubuntu 启动磁盘时，生成的<code>/grub</code>是在<code>/boot/grub</code>。<code>grub-install</code>的处理逻辑应该是先判断<code>/boot</code>路径是否存在，没有就新建。<br>所以，<strong>要将<code>/mnt/boot/grub</code>移动到<code>/mnt/grub</code></strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo mv /mnt/boot/grub /mnt/grub</div></pre></td></tr></table></figure></p>
+<h3 id="GRUB-引导修复类型"><a href="#GRUB-引导修复类型" class="headerlink" title="GRUB 引导修复类型"></a>GRUB 引导修复类型</h3><p>启动电脑后，当 GRUB 无法按照<code>boot.img</code> –&gt; <code>core.img</code> –&gt; <code>/boot/grub/</code>顺序执行时，会看到命令行界面，等待用户输入命令。此时可以通过输入 GRUB 内置的命令来修复 GRUB 引导。</p>
+<p><code>boot.img</code>是写在 MBR 中的，如果不能执行，直接跟 GRUB 引导方式说再见了，所以执行<code>boot.img</code>一般没问题。<code>boot.img</code>不能识别任何文件系统，<code>core.img</code>的位置是硬编码进<code>boot.img</code>的，所以执行<code>boot.img</code>一般没问题。因此，常见的引导问题集中在<code>/boot/grub/</code>，主要有两种，对应有两种引导修复模式：</p>
+<ul>
+<li><p>GRUB Rescue 模式<br>GRUB Rescue 模式是 GRUB 无法找到<code>/boot</code>分区，也就无法找到<code>/boot/grub/</code>。修复方法可以参考：<a href="https://www.douban.com/note/66041888/" target="_blank" rel="external">grub rescue 模式下修复</a>。</p>
+</li>
+<li><p>GRUB Normal 模式<br>GRUB Normal 模式是 GRUB 无法找到 GRUB 菜单<code>grub.cfg</code>，无法选择合适的内核或系统来启动。修复方法可以参考：<a href="https://www.gnu.org/software/grub/manual/html_node/GNU_002fLinux.html" target="_blank" rel="external">Boot GNU/Linux from GRUB</a>。</p>
+</li>
+</ul>
+<h2 id="数据复制"><a href="#数据复制" class="headerlink" title="数据复制"></a>数据复制</h2><p>该步骤是把 PC 硬盘中几个 Linux 分区的数据拷贝到 SSD 上对应的分区。<br>（<em>注意：PC Ubuntu 和 SSD Ubuntu 都有<code>/</code>、<code>/boot</code>、<code>/home</code>分区，阅读下文时注意辨别，我有时并没有写得很清晰。</em>）</p>
+<h3 id="操作方式"><a href="#操作方式" class="headerlink" title="操作方式"></a>操作方式</h3><p>操作的套路是先将 SSD 的分区使用<code>mount</code>命令挂载为 PC 的<code>/mnt</code>，使用<code>cp</code>命令复制数据，再用<code>umount</code>命令移出这个分区；对下一个分区做同样操作。</p>
+<ul>
+<li><p>挂载和移出操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 挂载</div><div class="line">$ sudo mount /dev/sdb2 /mnt</div><div class="line">// 移出</div><div class="line">$ sudo umount /mnt</div></pre></td></tr></table></figure>
+</li>
+<li><p>复制操作<br>使用<code>cp</code>指令要加<code>-r</code>，<code>-f</code>，<code>-a</code>参数，<code>-r</code>表示递归复制，<code>-f</code>表示强制覆盖，<code>-a</code>表示保留原文件的属性（mode，ownership，tiemstamps等）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo cp -rf -a source destination</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="复制-boot分区"><a href="#复制-boot分区" class="headerlink" title="复制/boot分区"></a>复制<code>/boot</code>分区</h3><p>SSD Ubuntu 的<code>/boot</code>从 PC Ubuntu 上看为<code>/dev/sdb2</code>，将<code>/dev/sdb2</code>挂载为 PC Ubuntu 的<code>/mnt</code>。安装 GRUB 之后，<code>/mnt</code>已经有<code>/grub</code>这个文件夹和默认的<code>lost+found</code>文件夹。<br>使用<code>cp</code>将 PC 的<code>/boot</code>中其他文件复制到<code>/mnt</code>。结果类似：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">/mnt/ ⌚ <span class="number">13</span>:<span class="number">56</span>:<span class="number">06</span></div><div class="line">$ ls | sort</div><div class="line">abi<span class="number">-4.8</span><span class="number">.0</span><span class="number">-36</span>-generic</div><div class="line">config<span class="number">-4.8</span><span class="number">.0</span><span class="number">-36</span>-generic</div><div class="line">grub</div><div class="line">initrd.img<span class="number">-4.8</span><span class="number">.0</span><span class="number">-36</span>-generic</div><div class="line">lost+found</div><div class="line">memtest86+.bin</div><div class="line">memtest86+.elf</div><div class="line">memtest86+_multiboot.bin</div><div class="line">System.map<span class="number">-4.8</span><span class="number">.0</span><span class="number">-36</span>-generic</div><div class="line">vmlinuz<span class="number">-4.8</span><span class="number">.0</span><span class="number">-36</span>-generic</div></pre></td></tr></table></figure></p>
+<h3 id="复制-分区"><a href="#复制-分区" class="headerlink" title="复制/分区"></a>复制<code>/</code>分区</h3><p>SSD Ubuntu 的<code>/</code>分区（根目录）比较特殊：一些子目录挂载了其他分区，并存在“伪目录”，<a href="https://slashmedia.wordpress.com/2007/12/23/linux-directory-structure/" target="_blank" rel="external">不同子目录有特定的用途</a>。</p>
+<p>所以复制<code>/</code>分区是有选择性的，不区分子目录进行复制，可能会提示“权限问题”、“无法访问”等错误。</p>
+<ul>
+<li><p>不需要复制的目录</p>
+<ul>
+<li><code>/boot</code>,<code>/home</code>，<code>/mnt</code>挂载了其他分区</li>
+<li><code>/media</code> <code>/cdrom</code> 挂载可移除的媒体（cdrom 等）</li>
+<li><code>/swap</code>交换分区（不需要交换分区了）</li>
+</ul>
+</li>
+<li><p>需要复制的目录<br>主要参考: <a href="http://www.cnblogs.com/xred/p/3898678.html" target="_blank" rel="external">Linux操作系统备份之二</a></p>
+<ul>
+<li><code>/bin</code> 系统可执行文件</li>
+<li><code>/etc</code> 系统核心配置文件</li>
+<li><code>/opt</code> 用户程序文件</li>
+<li><code>/root</code> root用户主目录</li>
+<li><code>/sbin</code> 系统可执行文件</li>
+<li><code>/usr</code> 程序安装目录</li>
+<li><code>/var</code> 系统运行目录</li>
+</ul>
+</li>
+<li><p>需要手动创建的目录<br>在<code>/mnt</code>中需要给 SSD 的<code>/</code>创建几个<strong>空目录</strong>。</p>
+<ul>
+<li><code>/dev</code> 主要存放与设备（包括外设）有关的文件</li>
+<li><code>/proc</code>  正在运行的内核信息映射</li>
+<li><code>/sys</code> 硬件设备的驱动程序信息</li>
+</ul>
+<p>这几个目录是 Linux 内核启动后由内核来挂载并存放信息的，不能从运行中的 PC Ubuntu 复制过去，但是需要建立空目录，不然内核启动后会报类似错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mount: mount point /dev does not exist</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>创建命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo mkdir dev proc sys</div></pre></td></tr></table></figure></p>
+<ul>
+<li>操作策略<ul>
+<li><strong>每个目录单独执行复制命令，出错了好处理</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制-home分区"><a href="#复制-home分区" class="headerlink" title="复制/home分区"></a>复制<code>/home</code>分区</h3><p>挂载 SSD Ubuntu<code>/home</code>到 PC Ubuntu <code>/mnt</code>，然后<strong>全盘复制</strong>：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo mount /dev/sdb4 /mnt</div><div class="line">$ sudo cp -rf -a /home/* /mnt</div></pre></td></tr></table></figure></p>
+<h3 id="挂载-home和-boot分区"><a href="#挂载-home和-boot分区" class="headerlink" title="挂载/home和/boot分区"></a>挂载<code>/home</code>和<code>/boot</code>分区</h3><p>SSD Ubuntu 的<code>/home</code>和<code>/boot</code>需要挂载到<code>/</code>，挂载方法为：修改<code>/ect/fstab</code>。</p>
+<ul>
+<li>挂载<code>/dev/sda3</code>为 PC Ubuntu <code>/mnt</code></li>
+<li><p>使用<code>blkid</code>查看 SSD 各分区的 UUID</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ sudo blkid</div><div class="line">...</div><div class="line">/dev/sdb3 UUID=&quot;a5eb2b0c-2104-4afe-aa78-93396d3e0986&quot; TYPE=&quot;ext4&quot; PARTUUID=&quot;b2708ce0-07&quot;</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+<li><p>修改 SSD Ubuntu 的<code>fstab</code>文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo vim /mnt/etc/fatab</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>fstab</code>文件大概是这样子的：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># /etc/fstab: static file system information.</div><div class="line">#</div><div class="line"># Use 'blkid' to print the universally unique identifier for a</div><div class="line"># device; this may be used with UUID= as a more robust way to name devices</div><div class="line"># that works even if disks are added and removed. See fstab(5).</div><div class="line">#</div><div class="line"># &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;</div><div class="line"># / was on /dev/sda3 during installation</div><div class="line">UUID=a5eb2b0c<span class="number">-2104</span><span class="number">-4</span>afe-aa78<span class="number">-93396</span>d3e0986 /               ext4    errors=remount-ro <span class="number">0</span>       <span class="number">1</span></div><div class="line">#</div><div class="line"># /boot was on /dev/sda2 during installation</div><div class="line">UUID=<span class="number">8</span>cba10c6-dff2<span class="number">-4300</span>-a630-ab0e7a4782af /boot           ext4    defaults        <span class="number">0</span>       <span class="number">2</span></div><div class="line">#</div><div class="line"># /home was on /dev/sda4 during installation</div><div class="line">UUID=<span class="number">298</span>ba5ad-d306<span class="number">-4</span>b4a-aaa8<span class="number">-54312590</span>dec6 /home           ext4    defaults        <span class="number">0</span>       <span class="number">2</span></div></pre></td></tr></table></figure></p>
+<h2 id="GRUB-引导修复"><a href="#GRUB-引导修复" class="headerlink" title="GRUB 引导修复"></a>GRUB 引导修复</h2><p>将 SSD 通过 USB 插入到笔记本，开机，选择从 USB 启动。此时应该会是看到类似下图的画面。<br><img src="/img/Ubuntu16.10_迁移到_SSD/GRUB-Prompt-crop.png" alt=""></p>
+<p>说明已经进入到 GRUB 引导程序中，但是没有 GRUB 启动选项，无法继续引导了。距离成功仅剩一步：修复 GRUB 引导。</p>
+<h3 id="指定内核启动"><a href="#指定内核启动" class="headerlink" title="指定内核启动"></a>指定内核启动</h3><ul>
+<li><p>指定<code>/boot</code>分区和<code>/grub</code>位置<em>（好像不需要这步，GRUB Rescue 才需要）</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// grub&gt; root=hd0,gpt2</div><div class="line">// grub&gt; prefix=(hd0,gpt2)/grub</div><div class="line">grub&gt; set root=hd0,gpt2</div><div class="line">grub&gt; set prefix=(hd0,gpt2)/grub</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置启动的 Linux 内核</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grub&gt; linux /vmlinuz-4.8.0-36-generic ro root=/dev/sda2</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置虚拟内存</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grub&gt; initrd /initrd.img-4.8.0-36-generic</div></pre></td></tr></table></figure>
+</li>
+<li><p>启动 SSD Ubuntu</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">grub&gt; boot</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>到这一步应该可以启动 SSD 的 Ubuntu，但是下次重新开机，又需要手动指定内核才能启动，通过在 SSD Ubuntu 中重建 GRUB 引导可以解决该问题。</p>
+<h3 id="重建-GRUB-引导"><a href="#重建-GRUB-引导" class="headerlink" title="重建 GRUB 引导"></a>重建 GRUB 引导</h3><p>从 SSD 开启 Ubuntu 成功后，执行以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ sudo update-grub</div><div class="line">$ sudo grub-install /dev/dsa</div></pre></td></tr></table></figure></p>
+<p>以上命令更新了 GRUB 可引导的系统/内核列表：<code>/boot/grub/grub.cf</code>，并重新安装了 GRUB。可以参考：<a href="https://help.ubuntu.com/community/Grub2/Installing" target="_blank" rel="external">Grub2/Installing</a>。</p>
+<p>笔记本下次开机，就能看到类似画面：<br><img src="/img/Ubuntu16.10_迁移到_SSD/grub-loader.jpg" alt=""></p>
+<h3 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h3><p>将 SSD 放入笔记本内置硬盘位，将旧的 HDD 放到光驱位置，开机，完成！（撒花）！</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>总共花了三天时间搞定这个事情，整理出文章花了N天，查看了很多资料，对计算机开机引导，硬盘分区和 GRUB 算是比较了解了。<br>现在笔记本有了 SSD + HDD，下一步可能会实践双硬盘的数据备份。<br>最后放上 HDD 凌乱的分区图，纪念这几年装机折腾的日子。<strong>折腾中总有收获。</strong><br><img src="/img/Ubuntu16.10_迁移到_SSD/old-disk-partition.png" alt=""></p>
+<h2 id="Refenrences"><a href="#Refenrences" class="headerlink" title="Refenrences"></a>Refenrences</h2><ul>
+<li>UEFI是什么？与BIOS的区别在哪里<blockquote>
+<p><a href="http://www.ihacksoft.com/uefi.html" target="_blank" rel="external">http://www.ihacksoft.com/uefi.html</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><p>Linux：系统启动引导过程</p>
+<blockquote>
+<p><a href="http://zhaodedong.leanote.com/post/Linux%EF%BC%9A%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B" target="_blank" rel="external">http://zhaodedong.leanote.com/post/Linux%EF%BC%9A%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B</a></p>
+</blockquote>
+</li>
+<li><p>What’s the Difference Between GPT and MBR When Partitioning a Drive</p>
+<blockquote>
+<p><a href="http://www.howtogeek.com/193669/whats-the-difference-between-gpt-and-mbr-when-partitioning-a-drive/" target="_blank" rel="external">http://www.howtogeek.com/193669/whats-the-difference-between-gpt-and-mbr-when-partitioning-a-drive/</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>6 Stages of Linux Boot Process (Startup Sequence)<blockquote>
+<p><a href="http://www.thegeekstuff.com/2011/02/Linux-boot-process/" target="_blank" rel="external">http://www.thegeekstuff.com/2011/02/Linux-boot-process/</a></p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>GRUB2 中文介绍<blockquote>
+<p><a href="https://my.oschina.net/guol/blog/37373" target="_blank" rel="external">https://my.oschina.net/guol/blog/37373</a></p>
+</blockquote>
+</li>
+</ul>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux-OS/" rel="tag"># Linux OS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/15/前后端分离开发模式的-mock-平台预研/" rel="next" title="前后端分离开发模式的 mock 平台预研">
+                <i class="fa fa-chevron-left"></i> 前后端分离开发模式的 mock 平台预研
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/27/SQL-温习/" rel="prev" title="SQL 温习">
+                SQL 温习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/02/11/Ubuntu16-10-迁移到-SSD/"
+           data-title="Ubuntu16.10 迁移到 SSD" data-url="http://cntchen.github.io/2017/02/11/Ubuntu16-10-迁移到-SSD/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Ubuntu16-10-迁移到-SSD"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu16.10 迁移到 SSD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开工准备"><span class="nav-number">1.2.</span> <span class="nav-text">开工准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">1.3.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BIOS-vs-UEFI"><span class="nav-number">1.3.1.</span> <span class="nav-text">BIOS vs UEFI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MBR-vs-GPT"><span class="nav-number">1.3.2.</span> <span class="nav-text">MBR vs GPT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-System"><span class="nav-number">1.3.3.</span> <span class="nav-text">File System</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#磁盘发展史"><span class="nav-number">1.3.4.</span> <span class="nav-text">磁盘发展史</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.3.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSD-分区"><span class="nav-number">1.4.</span> <span class="nav-text">SSD 分区</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘状态"><span class="nav-number">1.4.1.</span> <span class="nav-text">硬盘状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区策略"><span class="nav-number">1.4.2.</span> <span class="nav-text">分区策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分区操作"><span class="nav-number">1.4.3.</span> <span class="nav-text">分区操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRUB-引导"><span class="nav-number">1.5.</span> <span class="nav-text">GRUB 引导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRUB-是什么"><span class="nav-number">1.6.</span> <span class="nav-text">GRUB 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GRUB-位置"><span class="nav-number">1.6.1.</span> <span class="nav-text">GRUB 位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立-GRUB-引导"><span class="nav-number">1.6.2.</span> <span class="nav-text">建立 GRUB 引导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GRUB-引导修复类型"><span class="nav-number">1.6.3.</span> <span class="nav-text">GRUB 引导修复类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据复制"><span class="nav-number">1.7.</span> <span class="nav-text">数据复制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#操作方式"><span class="nav-number">1.7.1.</span> <span class="nav-text">操作方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制-boot分区"><span class="nav-number">1.7.2.</span> <span class="nav-text">复制/boot分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制-分区"><span class="nav-number">1.7.3.</span> <span class="nav-text">复制/分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制-home分区"><span class="nav-number">1.7.4.</span> <span class="nav-text">复制/home分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#挂载-home和-boot分区"><span class="nav-number">1.7.5.</span> <span class="nav-text">挂载/home和/boot分区</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRUB-引导修复"><span class="nav-number">1.8.</span> <span class="nav-text">GRUB 引导修复</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#指定内核启动"><span class="nav-number">1.8.1.</span> <span class="nav-text">指定内核启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重建-GRUB-引导"><span class="nav-number">1.8.2.</span> <span class="nav-text">重建 GRUB 引导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完成"><span class="nav-number">1.8.3.</span> <span class="nav-text">完成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">1.9.</span> <span class="nav-text">结语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Refenrences"><span class="nav-number">1.10.</span> <span class="nav-text">Refenrences</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number">2.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

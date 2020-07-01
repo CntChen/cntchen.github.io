@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端 实习," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最大存储的monitor数目：501var MaxMonitorNumber = 50; 使用 CookieInOne 存储已经打开的taskObj（大小有限，大概4K）使用 LocalStorageInOne 存储已经打开的taskObj（IE8+，大小可达5M）使用 LocalStorageInOne 存储当前页面的布局“快照”  需要浏览器打开cookie和localStoarge，并且浏览">
+<meta name="keywords" content="前端 实习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dashborad 页面开发记录">
+<meta property="og:url" content="http://cntchen.github.io/2015/09/12/Dashborad-页面开发记录/index.html">
+<meta property="og:site_name" content="CntChen Blog">
+<meta property="og:description" content="最大存储的monitor数目：501var MaxMonitorNumber = 50; 使用 CookieInOne 存储已经打开的taskObj（大小有限，大概4K）使用 LocalStorageInOne 存储已经打开的taskObj（IE8+，大小可达5M）使用 LocalStorageInOne 存储当前页面的布局“快照”  需要浏览器打开cookie和localStoarge，并且浏览">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-07-01T06:47:42.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dashborad 页面开发记录">
+<meta name="twitter:description" content="最大存储的monitor数目：501var MaxMonitorNumber = 50; 使用 CookieInOne 存储已经打开的taskObj（大小有限，大概4K）使用 LocalStorageInOne 存储已经打开的taskObj（IE8+，大小可达5M）使用 LocalStorageInOne 存储当前页面的布局“快照”  需要浏览器打开cookie和localStoarge，并且浏览">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://cntchen.github.io/2015/09/12/Dashborad-页面开发记录/"/>
+
+
+
+
+
+  <title>Dashborad 页面开发记录 | CntChen Blog</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CntChen Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">FE Software Engineer</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://cntchen.github.io/2015/09/12/Dashborad-页面开发记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CntChen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CntChen Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Dashborad 页面开发记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2015-09-12T01:01:01+08:00">
+                2015-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2015/09/12/Dashborad-页面开发记录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/12/Dashborad-页面开发记录/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="最大存储的monitor数目：50"><a href="#最大存储的monitor数目：50" class="headerlink" title="最大存储的monitor数目：50"></a>最大存储的monitor数目：50</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var MaxMonitorNumber = 50;</div></pre></td></tr></table></figure>
+<p><del>使用 <code>CookieInOne</code> 存储已经打开的taskObj（大小有限，大概4K）</del><br>使用 <code>LocalStorageInOne</code> 存储已经打开的taskObj（IE8+，大小可达5M）<br>使用 <code>LocalStorageInOne</code> 存储当前页面的布局“快照” </p>
+<p><strong>需要浏览器打开cookie和localStoarge，并且浏览器设置为”退出不清理数据”</strong></p>
+<h3 id="基于“快照”的页面布局存储"><a href="#基于“快照”的页面布局存储" class="headerlink" title="基于“快照”的页面布局存储"></a>基于“快照”的页面布局存储</h3><p><em>需求:</em></p>
+<p>保留页面关闭前的打开monitor，保留其布局位置，不管任务是否删除，其占位都应该存在。</p>
+<ul>
+<li><p>快照内容：</p>
+<ul>
+<li>Wall: freeWall添加的style和布局状态</li>
+<li>Brick: freeWall添加的style和布局状态，其他内容是空壳，在页面载入后重新填充菜单、canvas等</li>
+<li>monitorStatus: 各个monitor的图形大小和图形类型<br><strong>用于再次进入页面后更新默认monitor菜单</strong></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>快照收集函数 <code>collectDashboardWallDiv</code> 调用</p>
+<ul>
+<li>页面响应式布局的回调 <code>onComplete</code></li>
+<li>monitor删除的回调 <code>registerDeleteTaskMonitorCallback</code><br><em>应对所有monitor删除后没有brick，页面不会回调<code>onComplete</code>的情况</em></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>快照释放</p>
+<ul>
+<li><p>进入页面时</p>
+</li>
+<li><p>不要使用 <code>outerHTML</code>, <code>outerHTML</code>替换 <code>#dashboardwall</code> 的HTML文本，会返回一个新的DOM对象，使得依靠<code>#dashboardwall</code>初始化的 <code>freeWall</code> 只能在所有快照替换后才能初始化，正常情况下 <code>freeWall</code> 可以独立初始化</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function releaseDashboardwall() &#123;</div><div class="line">  var dashboardWallDiv = dashboardWallCookie.getItemArray()[0];</div><div class="line">  if (dashboardWallDiv) &#123;</div><div class="line">    var dashboardWall = $(&apos;#dashboardwall&apos;);</div><div class="line">    var sotred = $(dashboardWallDiv);</div><div class="line">    dashboardWall[0].innerHTML = sotred[0].innerHTML; // 不要使用 outerHTML</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><code>defaultMonitorStatus</code><br>从浏览器存储中获取各个monitor的默认菜单，在<code>addTaskMonitor</code>中填充菜单</li>
+</ul>
+</li>
+</ul>
+<h3 id="基于-freeWall的页面响应式布局"><a href="#基于-freeWall的页面响应式布局" class="headerlink" title="基于 freeWall的页面响应式布局"></a>基于 freeWall的页面响应式布局</h3><ul>
+<li><p><a href="https://github.com/kombai/freewall" target="_blank" rel="external">freeWall</a></p>
+<ul>
+<li><p>特性</p>
+<ul>
+<li>可拖拽</li>
+<li>响应式布局</li>
+<li>多种布局风格等等<br>-</li>
+</ul>
+</li>
+<li><p>文档没提但是重要</p>
+<ul>
+<li><p>freeWall会在brick中修改style和添加data-* 的标识，例如：<code>data-position</code>，<code>data-handle</code>等,用于标识brick的状态。</p>
+</li>
+<li><p>brick用户不能设置<code>id</code>,因为freeWall会给brick添加id属性，覆盖用户的设置。</p>
+</li>
+<li><p>拖拽产生的布局优先级最高，brick拖拽后所在坐标位置，不会受<code>fitWidht</code> <code>fitHeight</code> <code>fillHoles</code>等布局变化的影响，需要通过清除brick的<code>data-position</code>来去除拖拽布局的优先级</p>
+</li>
+<li><p>draggable的handle设置方法：brick的<code>data-handle=&quot;xxx&quot;</code>，<code>xxx</code>为CSS选择器字段</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>需求： monitor添加，删除，大小变化，拖拽</p>
+</li>
+<li><p>实现方案：</p>
+<ul>
+<li>Brick Default Size：300px - 300px<br><em>300大小是最合适的，再小的话图形太小，再大的话窗口宽度X3可能会不够铺开，然后Brick被收缩为0，Chart绘制抛出异常</em> </li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">.dashboardbrick</div><div class="line">&#123;</div><div class="line">  ...</div><div class="line">  width: 300px;</div><div class="line">  height: 300px;</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>Browser Width： 至少 <strong>1024px</strong><br><em>因为每个brick的大小为300px，保证Brick宽度可以X3</em></p>
+</li>
+<li><p>freeWall配置参数</p>
+<ul>
+<li><p><code>draggabel:true</code>,允许拖动。</p>
+</li>
+<li><p><code>cellW</code> <code>cellH</code> 设置brick适配的<strong>单位长度</strong>，为300，则brick宽度为300，600，900等。最好设置与brick默认大小一致，设置太小会导致brick覆盖。</p>
+</li>
+<li><p><code>fixSize</code> 必须指定，并为0。为0时brick无法改变宽高比例，但是可以改变大小适应窗口。</p>
+</li>
+<li><p><code>onComplete</code>调用<code>freeWall.fillHoles();</code>,对删除brick后留下的空间进行填补。</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">freeWall.reset(&#123;</div><div class="line">  draggable: true,</div><div class="line">  // selector: &apos;.dashboardbrick&apos;,</div><div class="line">  // animate: true,</div><div class="line">  cache: true,</div><div class="line">  cellW: defaultMonitorWidth,</div><div class="line">  cellH: defalutMonitorHeight,</div><div class="line">  delay: 0,</div><div class="line">  fixSize: 0,</div><div class="line">  gutterX: 15,</div><div class="line">  gutterY: 15,</div><div class="line">  onResize: function() &#123;</div><div class="line">    freeWall.refresh();</div><div class="line">  &#125;,</div><div class="line">  onComplete: function() &#123;</div><div class="line">    freeWall.fillHoles();</div><div class="line">    collectDashboardWallDiv();</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<ul>
+<li><p>拖拽设置</p>
+<ul>
+<li>不使用brick整个可响应拖拽，因为会freeWall会<strong>终止点击事件传递</strong>，使得图形设置菜单的popup管理无法处理(依赖<code>document.click</code>)；</li>
+<li>设置<code>data-handle=&quot;.monitortitletext&quot;</code>，使用monitor标题作为拖动handle</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Brick大小变化</p>
+<ul>
+<li><p>在<code>registerChangeMonitorSizeCallback</code>中处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">freeWall.fixSize(&#123;</div><div class="line">  block: element,</div><div class="line">  width: newWidth,</div><div class="line">  height: newHeight</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>freeWall.fixPos()</code>去除拖拽后的位置优先级，使得可以在图形变化后布局到合适位置<br><em>例如：如果brick是一行中最后一个，宽度X2后，如果不freeWall.fixPos()，该brick会直接在原来位置宽度X2，页面宽度超过窗口宽度，页面宽会变成scroll</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">freeWall.fixPos(&#123;</div><div class="line">  block: element</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>Brick宽度X3操作需要窗口有较大的宽度</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><code>onResize</code>事件</p>
+<ul>
+<li><p><strong>假设用户不会做<code>resize</code>的操作</strong></p>
+</li>
+<li><p>再测试</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="看坑"><a href="#看坑" class="headerlink" title="看坑"></a>看坑</h3><ul>
+<li><p>freeWall的CSS <code>padding</code>对于brick无效，brick都是<code>position：absolute</code>，请使用<code>margin</code></p>
+</li>
+<li><p><code>outerHTML</code>或返回新的DOM对象,参考<a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML" target="_blank" rel="external">Element.outerHTML</a></p>
+<blockquote>
+<p>Replaces the element with the nodes generated by parsing the string content with the parent of element as the context node for the fragment parsing algorithm.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><p>对freeWall源码做了修改：</p>
+<ul>
+<li><p>拓展<code>freeWall.fixPos()</code>方法，不带<code>top</code>或<code>left</code>参数时候，删除brick的位置属性<code>data-position</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">freeWall.fixPos(&#123;</div><div class="line">  block: element</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>setDraggable</code>,移除旧的<code>handle</code>绑定，然后设置新的<code>handle</code>绑定。</p>
+</li>
+</ul>
+<h2 id="完"><a href="#完" class="headerlink" title="完"></a>完</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端-实习/" rel="tag"># 前端 实习</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/12/uihelper.js 开发记录/" rel="next" title="uihelper.js 开发记录">
+                <i class="fa fa-chevron-left"></i> uihelper.js 开发记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/09/百度JavaScirpt  API中经纬度坐标转瓦片坐标bug/" rel="prev" title="百度JavaScript API中经纬度坐标转瓦片坐标bug">
+                百度JavaScript API中经纬度坐标转瓦片坐标bug <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2015/09/12/Dashborad-页面开发记录/"
+           data-title="Dashborad 页面开发记录" data-url="http://cntchen.github.io/2015/09/12/Dashborad-页面开发记录/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CntChen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#最大存储的monitor数目：50"><span class="nav-number">1.</span> <span class="nav-text">最大存储的monitor数目：50</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于“快照”的页面布局存储"><span class="nav-number">2.</span> <span class="nav-text">基于“快照”的页面布局存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-freeWall的页面响应式布局"><span class="nav-number">3.</span> <span class="nav-text">基于 freeWall的页面响应式布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看坑"><span class="nav-number">4.</span> <span class="nav-text">看坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展"><span class="nav-number">5.</span> <span class="nav-text">扩展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完"><span class="nav-number"></span> <span class="nav-text">完</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CntChen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"cntchen-notes"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
