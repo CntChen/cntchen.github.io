@@ -2,6 +2,7 @@
 
 ## 文章
 
+* [Web Worker 文献回顾](https://github.com/CntChen/cntchen.github.io/issues/19)
 * [页面可视化搭建工具前生今世](https://github.com/CntChen/cntchen.github.io/issues/15)
 * [页面可视化搭建工具技术要点](https://github.com/CntChen/cntchen.github.io/issues/17)
 * [前后端分离开发模式的 mock 平台预研](https://github.com/CntChen/cntchen.github.io/issues/1)
