@@ -1,49 +1,17 @@
 # CntChen Blog
 
-## 部署
-使用 hexo 生成静态博客。
-如果是首次搭建自己的博客，参考 hexo 的官方教程搭建。
+## 文章
 
-搭建后，一个需要解决的问题是：如何跨机器保留博客源码。
-建立两个分支，`hexo`和`master`，其中：
-`hexo` 是页面源码分支
-`master` 是生成后的静态页面分支
+* [页面可视化搭建工具前生今世](https://github.com/CntChen/cntchen.github.io/issues/15)
+* [页面可视化搭建工具技术要点](https://github.com/CntChen/cntchen.github.io/issues/17)
+* [前后端分离开发模式的 mock 平台预研](https://github.com/CntChen/cntchen.github.io/issues/1)
+* [IE9 跨域请求兼容](https://github.com/CntChen/cntchen.github.io/issues/14)
+* [国内主要地图瓦片坐标系定义及计算原理](http://cntchen.github.io/2016/05/09/%E5%9B%BD%E5%86%85%E4%B8%BB%E8%A6%81%E5%9C%B0%E5%9B%BE%E7%93%A6%E7%89%87%E5%9D%90%E6%A0%87%E7%B3%BB%E5%AE%9A%E4%B9%89%E5%8F%8A%E8%AE%A1%E7%AE%97%E5%8E%9F%E7%90%86/)
 
-### 新机器使用
-* clone
-```
-$ git clone https://github.com/CntChen/cntchen.github.io.git
-```
+## 分享 PPT
 
-* download theme, what I am using is [`next`](https://github.com/iissnan/hexo-theme-next)
-```
-$ git clone https://github.com/iissnan/hexo-theme-next themes/next
-```
+* [页面可视化搭建工具实践](https://github.com/CntChen/for-slides/blob/master/pipeline.pdf)
+* [前端配置管理系统从0到1](https://github.com/CntChen/for-slides/blob/master/c.pdf)
+* [常用命令行工具介绍](https://cntchen.github.io/command-line-keynote/)
 
-* change branch
-```
-$ git checkout hexo
-```
-
-* new post
-```
-$ hexo new [post] "new blog title"
-```
-
-* commit
-```
-$ git add .
-$ git commit -m "say something"
-```
-
-* push
-```
-// 提交到 hexo 分支
-$ git push origin hexo
-```
-
-* commit blog
-```
-$ hexo g -d
-```
-
+## EOF
