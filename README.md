@@ -11,6 +11,7 @@
 
 ## 分享 PPT
 
+* [腾讯文档 Web Worker 前端多线程实践](https://github.com/CntChen/for-slides/blob/master/webworker.pdf)
 * [页面可视化搭建工具实践](https://github.com/CntChen/for-slides/blob/master/pipeline.pdf)
 * [前端配置管理系统从0到1](https://github.com/CntChen/for-slides/blob/master/c.pdf)
 * [常用命令行工具介绍](https://cntchen.github.io/command-line-keynote/)
